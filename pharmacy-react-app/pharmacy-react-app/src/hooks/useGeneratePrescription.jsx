@@ -6,7 +6,7 @@ export const handleSubmit = async () => {
       const [notificationMsg, setNotificationMsg] = useState(false);
         const [error, setError] = useState(null);
         const [prescriptionId, setPrescriptionId] = useState(null);
-      
+      const [prescription, setPrescription] = useState(null);
     if (!symptoms.trim()) {
       setError("Please enter your symptoms");
       return;
