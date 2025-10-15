@@ -7,12 +7,19 @@ import {
   User,
 } from "lucide-react";
 import useHandleOperations from "./hooks/useHandleOperations";
+
 function App() {
   const [prescriptions, setPrescriptions] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [llmPrescriptionText, setLlmPrescriptionText] = useState("");
 
-  const [handleEdit, handleSave, handleStatusChange, summary] = useHandleOperations();
+  const { handleEdit, handleSave, handleStatusChange, summary } = useHandleOperations(
+    prescriptions,
+    setPrescriptions,
+    setEditingId,
+    llmPrescriptionText,
+    setLlmPrescriptionText
+  );
 
   useEffect(() => {
     fetch("http://localhost:5000/list-prescriptions")
@@ -25,61 +32,6 @@ function App() {
         console.error("Error fetching prescriptions:", error);
       });
   }, []);
-
-  // const handleEdit = (prescription) => {
-  //   setEditingId(prescription._id);
-  //   setLlmPrescriptionText(prescription.llmPrescription);
-  // };
-
-  // const handleSave = async (id) => {
-  //   const prescriptionToSave = prescriptions.find((p) => p._id === id);
-  //   if (!prescriptionToSave) return;
-
-  //   const updatedPrescription = {
-  //     ...prescriptionToSave,
-  //     llmPrescription: llmPrescriptionText,
-  //     status: "reviewed",
-  //     submittedDateTime: prescriptionToSave.submittedDateTime,
-  //   };
-
-  //   try {
-  //     const response = await fetch("http://localhost:5000/update-prescription", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(updatedPrescription),
-  //     });
-
-  //     if (!response.ok) throw new Error("Failed to save prescription");
-
-  //     const resData = await response.json();
-  //     const newId = resData.inserted_id || id;
-
-  //     setPrescriptions(
-  //       prescriptions.map((p) =>
-  //         p._id === id ? { ...updatedPrescription, _id: newId } : p
-  //       )
-  //     );
-  //     setEditingId(null);
-  //     setLlmPrescriptionText("");
-  //   } catch (error) {
-  //     console.error("Error saving prescription:", error);
-  //     alert("Failed to save prescription.");
-  //   }
-  // };
-
-  // const handleStatusChange = (id, newStatus) => {
-  //   setPrescriptions(
-  //     prescriptions.map((p) =>
-  //       p._id === id ? { ...p, status: newStatus } : p
-  //     )
-  //   );
-  // };
-
-  // const summary = {
-  //   new: prescriptions.filter((p) => p.status === "open").length,
-  //   reviewed: prescriptions.filter((p) => p.status === "reviewed").length,
-  //   closed: prescriptions.filter((p) => p.status === "closed").length,
-  // };
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans text-gray-800">
@@ -153,7 +105,7 @@ function App() {
                 <th className="py-3 px-4 border border-indigo-200">User ID</th>
                 <th className="py-3 px-4 border border-indigo-200">Illness Description</th>
                 <th className="py-3 px-4 border border-indigo-200 max-w-xs">Prescription</th>
-                <th className="py-3 px-4 border border-indigo-200  max-w-xs">Submitted Time</th>
+                <th className="py-3 px-4 border border-indigo-200 max-w-xs">Submitted Time</th>
                 <th className="py-3 px-4 border border-indigo-200">Status</th>
                 <th className="py-3 px-4 border border-indigo-200">Actions</th>
               </tr>
@@ -178,7 +130,7 @@ function App() {
                       p.llmPrescription
                     )}
                   </td>
-                  <td className="py-3 px-4 border border-indigo-200  max-w-xs">
+                  <td className="py-3 px-4 border border-indigo-200 max-w-xs">
                     {new Date(p.submittedDateTime).toLocaleString()}
                   </td>
                   <td className="py-3 px-4 border border-indigo-200">
