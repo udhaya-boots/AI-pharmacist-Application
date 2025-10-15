@@ -1,7 +1,8 @@
-import { useEffect,useState } from "react";
+import { use, useEffect,useState } from "react";
 
 // Submit handler
-export const handleSubmit = async () => {
+const useGeneratePrescription =  () => {
+  const handleSubmit = async () => {
       const [symptoms, setSymptoms] = useState("");
       const [notificationMsg, setNotificationMsg] = useState(false);
         const [error, setError] = useState(null);
@@ -56,5 +57,6 @@ export const handleSubmit = async () => {
     return () => clearInterval(interval);
   }, [prescriptionId]);
   };
-  
-  
+  return {handleSubmit};
+};
+export default useGeneratePrescription;

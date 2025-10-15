@@ -1,12 +1,13 @@
 // import React from 'react';
 import { TextField, Button, Snackbar, Alert, Box, Typography, Paper } from "@mui/material";
-import { handleSubmit } from "./hooks/useGeneratePrescription";
+import useGeneratePrescription from "./hooks/useGeneratePrescription";
 import { useState } from "react";
 const Home = () => {
       const [symptoms, setSymptoms] = useState("");
     const [error, setError] = useState(null);
     const [notificationMsg, setNotificationMsg] = useState(false);
     const [prescription, setPrescription] = useState(null);
+    const {handleSubmit}=useGeneratePrescription();
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "#F3E9D2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 3 }}>
             <Paper elevation={10} sx={{ p: 4, width: 400, bgcolor: "#C7D3B0", borderRadius: 5, boxShadow: "0 0 20px #A7C4A0" }}>
