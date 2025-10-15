@@ -1,5 +1,5 @@
-import { useState } from "react";
-export const useHandleOperations=()=>{
+import { use, useState } from "react";
+const useHandleOperations=()=>{
 
   const  handleEdit = (prescription) => {
       setEditingId(prescription._id);
@@ -58,3 +58,4 @@ export const useHandleOperations=()=>{
       closed: prescriptions.filter((p) => p.status === "closed").length,
     };
 }
+export default useHandleOperations;
