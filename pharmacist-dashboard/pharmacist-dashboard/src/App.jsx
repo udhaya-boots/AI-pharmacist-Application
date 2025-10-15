@@ -6,11 +6,13 @@ import {
   FileX,
   User,
 } from "lucide-react";
-import { handleEdit,handleSave,handleStatusChange } from "./hooks/useHandleOperations";
+import useHandleOperations from "./hooks/useHandleOperations";
 function App() {
   const [prescriptions, setPrescriptions] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [llmPrescriptionText, setLlmPrescriptionText] = useState("");
+
+  const [handleEdit, handleSave, handleStatusChange, summary] = useHandleOperations();
 
   useEffect(() => {
     fetch("http://localhost:5000/list-prescriptions")
