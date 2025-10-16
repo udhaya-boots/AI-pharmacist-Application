@@ -23,13 +23,16 @@ const PrescriptionPage = () => {
     const [prescription, setPrescription] = useState({
         ...prescriptionData.prescriptions[0]
     });
+    const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [editedPrescription, setEditedPrescription] = useState(prescription.llmPrescription);
+    const [type,setType]=useState('success');
     const [notes, setNotes] = useState('');
 
     const handleSave = () => {
-        setAlertMessage('Notes saved successfully!');
+        setType('success');
+        setAlertMessage('Prescription saved successfully!');
         setShowAlert(true);
 
         setPrescription({
@@ -39,7 +42,24 @@ const PrescriptionPage = () => {
         });
         setIsEditing(false);
     };
-
+    const handleSaveNotes = () => {
+        setPrescription({
+            ...prescription,
+            notes: notes
+        });
+        console.log(notes);
+        
+        if(notes){
+            // Set success alert for note addition
+            setType('success');
+            setAlertMessage('Note added successfully!');
+            setShowAlert(true);
+        }else{
+            setType('error');
+            setAlertMessage('Please add a note before saving.');
+            setShowAlert(true);
+        }
+    };
     const handleStatusChange = (newStatus) => {
         setPrescription({
             ...prescription,
@@ -55,7 +75,6 @@ const PrescriptionPage = () => {
             default: return 'text-gray-600 bg-gray-50';
         }
     };
-    const navigate = useNavigate();
     return (
         <>
 
@@ -68,7 +87,7 @@ const PrescriptionPage = () => {
                     <div className="mb-8">
                         <button className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800 mb-4 transition-colors" onClick={() => navigate('/')}>
                             <ArrowLeft size={20} />
-                            <span className="font-medium">Back to Prescriptions</span>
+                            <span className="font-medium">Go Back</span>
                         </button>
                         <div className="flex items-start justify-between">
                             <div>
@@ -219,7 +238,7 @@ const PrescriptionPage = () => {
                                         }}
                                         className="flex items-center space-x-2 bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors"
                                     >
-                                        
+
                                         <span>Cancel</span>
                                     </button>
                                 </div>
@@ -246,7 +265,7 @@ const PrescriptionPage = () => {
                             onChange={(e) => setNotes(e.target.value)}
                         />
                         <button
-                            onClick={() => setPrescription({ ...prescription, notes })}
+                            onClick={handleSaveNotes}
                             className="mt-3 flex items-center space-x-2 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                         >
                             <CheckCircle size={18} />
@@ -259,6 +278,7 @@ const PrescriptionPage = () => {
             {/* Success Alert */}
             <SuccessAlert
                 message={alertMessage}
+                type={type}
                 isVisible={showAlert}
                 onClose={() => setShowAlert(false)}
                 duration={3000}
