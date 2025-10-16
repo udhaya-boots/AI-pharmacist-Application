@@ -18,17 +18,17 @@ const Home = () => {
         setLlmPrescriptionText
     );
 
-    useEffect(() => {
-        fetch("http://localhost:5000/list-prescriptions")
-            .then((response) => {
-                if (!response.ok) throw new Error("Network response was not ok");
-                return response.json();
-            })
-            .then((data) => setPrescriptions(data))
-            .catch((error) => {
-                console.error("Error fetching prescriptions:", error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/list-prescriptions")
+    //         .then((response) => {
+    //             if (!response.ok) throw new Error("Network response was not ok");
+    //             return response.json();
+    //         })
+    //         .then((data) => setPrescriptions(data))
+    //         .catch((error) => {
+    //             console.error("Error fetching prescriptions:", error);
+    //         });
+    // }, []);
 
     return (
         <div className="p-10 max-w-full overflow-auto">

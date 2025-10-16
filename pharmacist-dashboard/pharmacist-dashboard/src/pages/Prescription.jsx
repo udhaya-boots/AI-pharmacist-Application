@@ -14,9 +14,8 @@ import {
     Activity
 } from "lucide-react";
 import prescriptionData from '../data/prescription';
-import SideBar from '../SideBar';
 import { useNavigate } from 'react-router-dom';
-import SuccessAlert from '../components/SuccessAlert';
+import Alert from '../components/SuccessAlert';
 
 const PrescriptionPage = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -80,7 +79,6 @@ const PrescriptionPage = () => {
 
             <div className="flex min-h-screen bg-gray-50 font-sans text-gray-800">
                 {/* Sidebar */}
-                <SideBar />
                 {/* Main Content */}
                 <main className="flex-1 p-10 max-w-full overflow-auto">
                     {/* Header with Back Button */}
@@ -275,8 +273,8 @@ const PrescriptionPage = () => {
                 </main>
             </div>
 
-            {/* Success Alert */}
-            <SuccessAlert
+            {/* Alert */}
+            <Alert
                 message={alertMessage}
                 type={type}
                 isVisible={showAlert}

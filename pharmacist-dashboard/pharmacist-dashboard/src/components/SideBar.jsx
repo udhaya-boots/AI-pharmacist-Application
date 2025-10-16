@@ -15,7 +15,7 @@ const SideBar = () => {
     const { pharmacist, logout } = usePharmacist();
     
     const handlePrescriptionsClick = () => {
-        navigate('/');
+        navigate('/prescriptions');
     };
 
     const handleProfileClick = () => {

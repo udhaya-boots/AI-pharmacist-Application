@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { AlertTriangle, CheckCircle, Info, X, XCircle } from 'lucide-react';
 
-const SuccessAlert = ({ message, isVisible, onClose, duration = 3000, type }) => {
+const Alert = ({ message, isVisible, onClose, duration = 3000, type }) => {
   useEffect(() => {
     if (isVisible && duration > 0) {
       const timer = setTimeout(() => {
@@ -68,4 +68,4 @@ const SuccessAlert = ({ message, isVisible, onClose, duration = 3000, type }) =>
     </div>
   );
 };
-export default SuccessAlert;
+export default Alert;

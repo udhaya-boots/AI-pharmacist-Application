@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import PrescriptionPage from "./pages/Prescription";
 import SideBar from "./components/SideBar";
-
+import { PharmacistProvider } from "./context/PharmacistContext";
+import PharmacistProfile from "./components/PharmacistProfile";
 // function App() {
 //   // const [prescriptions, setPrescriptions] = useState([]);
 //   // const [editingId, setEditingId] = useState(null);
