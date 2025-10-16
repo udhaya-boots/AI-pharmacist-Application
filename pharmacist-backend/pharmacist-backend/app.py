@@ -26,6 +26,8 @@ ALLOWED_EXTENSIONS = {'webm', 'wav'}
 client = MongoClient('mongodb://localhost:27017/')
 db = client['user_data']
 collection = db['user_prescriptions']
+users_collection = db['users']
+pharmacists_collection = db['pharmacists']
 
 
 # -------------------- UTILITIES --------------------
@@ -239,6 +241,126 @@ def update_prescription():
         return jsonify({"updated_id": prescription_id}), 200
     else:
         return jsonify({"message": "No document updated"}), 404
+
+
+# -------------------- USER PROFILE ROUTES --------------------
+@app.route('/user/profile/<user_id>', methods=['GET'])
+def get_user_profile(user_id):
+    """Get user profile by user ID"""
+    user = users_collection.find_one({"id": user_id})
+    if not user:
+        # Return mock data if user not found (for demonstration)
+        mock_user = {
+            "id": user_id,
+            "name": "Peter Johnson",
+            "email": "peter.johnson@email.com",
+            "phone": "+1 (555) 123-4567",
+            "dateOfBirth": "1990-05-15",
+            "gender": "Male",
+            "bloodType": "O+",
+            "address": "123 Main Street, City, State 12345",
+            "emergencyContact": "Jane Johnson - +1 (555) 987-6543",
+            "allergies": ["Penicillin", "Peanuts"],
+            "chronicConditions": ["Hypertension"],
+            "lastVisit": "2024-10-10",
+            "profilePicture": None,
+            "role": "patient"
+        }
+        return jsonify(mock_user), 200
+    
+    user['_id'] = str(user['_id'])
+    return jsonify(user), 200
+
+
+@app.route('/user/profile/<user_id>', methods=['PUT'])
+def update_user_profile(user_id):
+    """Update user profile"""
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Remove _id from update data if present
+    data.pop('_id', None)
+    data['lastUpdated'] = datetime.now()
+    
+    result = users_collection.update_one(
+        {"id": user_id}, 
+        {"$set": data}, 
+        upsert=True
+    )
+    
+    if result.upserted_id or result.modified_count > 0:
+        return jsonify({"message": "Profile updated successfully"}), 200
+    else:
+        return jsonify({"message": "No changes made"}), 200
+
+
+@app.route('/pharmacist/profile/<pharmacist_id>', methods=['GET'])
+def get_pharmacist_profile(pharmacist_id):
+    """Get pharmacist profile by pharmacist ID"""
+    pharmacist = pharmacists_collection.find_one({"id": pharmacist_id})
+    if not pharmacist:
+        # Return mock data if pharmacist not found (for demonstration)
+        mock_pharmacist = {
+            "id": pharmacist_id,
+            "name": "Dr. John Peter",
+            "email": "john.peter@pharmacy.com",
+            "phone": "+1 (555) 234-5678",
+            "licenseNumber": "PH-12345",
+            "specialization": "Clinical Pharmacy",
+            "experience": "8 years",
+            "department": "General Medicine",
+            "address": "456 Medical Center Drive, City, State 12345",
+            "dateJoined": "2016-03-15",
+            "lastActive": datetime.now().isoformat(),
+            "certifications": ["PharmD", "Clinical Pharmacy Specialist", "Medication Therapy Management"],
+            "languages": ["English", "Spanish", "French"],
+            "workSchedule": "Monday - Friday, 9:00 AM - 6:00 PM",
+            "profilePicture": None,
+            "role": "pharmacist"
+        }
+        return jsonify(mock_pharmacist), 200
+    
+    pharmacist['_id'] = str(pharmacist['_id'])
+    return jsonify(pharmacist), 200
+
+
+@app.route('/pharmacist/profile/<pharmacist_id>', methods=['PUT'])
+def update_pharmacist_profile(pharmacist_id):
+    """Update pharmacist profile"""
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    # Remove _id from update data if present
+    data.pop('_id', None)
+    data['lastUpdated'] = datetime.now()
+    data['lastActive'] = datetime.now()
+    
+    result = pharmacists_collection.update_one(
+        {"id": pharmacist_id}, 
+        {"$set": data}, 
+        upsert=True
+    )
+    
+    if result.upserted_id or result.modified_count > 0:
+        return jsonify({"message": "Profile updated successfully"}), 200
+    else:
+        return jsonify({"message": "No changes made"}), 200
+
+
+@app.route('/user/prescriptions/<user_id>', methods=['GET'])
+def get_user_prescriptions(user_id):
+    """Get all prescriptions for a specific user"""
+    prescriptions = []
+    for doc in collection.find({"userId": user_id}):
+        doc['_id'] = str(doc['_id'])
+        if 'submittedDateTime' in doc and isinstance(doc['submittedDateTime'], datetime):
+            doc['submittedDateTime'] = doc['submittedDateTime'].isoformat()
+        if 'reviwedDateTime' in doc and isinstance(doc['reviwedDateTime'], datetime):
+            doc['reviwedDateTime'] = doc['reviwedDateTime'].isoformat()
+        prescriptions.append(doc)
+    return jsonify(prescriptions), 200
 
 
 def add_prescription(illnessDescription, llmPrescription, status):
