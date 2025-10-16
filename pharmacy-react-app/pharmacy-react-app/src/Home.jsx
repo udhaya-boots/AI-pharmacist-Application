@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { TextField, Button, Snackbar, Alert, Box, Typography, Paper } from "@mui/material";
 import { useUser } from "./context/UserContext";
 import useGeneratePrescription from "./hooks/useGeneratePrescription";
@@ -11,26 +11,26 @@ const Home = () => {
     const [prescription, setPrescription] = useState(null);
     const { handleSubmit } = useGeneratePrescription();
 
-    const onSubmit = async () => {
-        if (!symptoms.trim()) {
-            setError("Please enter your symptoms");
-            return;
-        }
-        setError(null);
-        try {
-            const response = await fetch("http://127.0.0.1:5000/generate-prescription", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ symptoms }),
-            });
-            if (!response.ok) throw new Error("Prescription generation failed");
-            const data = await response.json();
-            setNotificationMsg(true);
-            setSymptoms("");
-        } catch (e) {
-            setError(e.message || "Error submitting symptoms");
-        }
-    };
+    // const onSubmit = async () => {
+    //     if (!symptoms.trim()) {
+    //         setError("Please enter your symptoms");
+    //         return;
+    //     }
+    //     setError(null);
+    //     try {
+    //         const response = await fetch("http://127.0.0.1:5000/generate-prescription", {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({ symptoms }),
+    //         });
+    //         if (!response.ok) throw new Error("Prescription generation failed");
+    //         const data = await response.json();
+    //         setNotificationMsg(true);
+    //         setSymptoms("");
+    //     } catch (e) {
+    //         setError(e.message || "Error submitting symptoms");
+    //     }
+    // };
 
     return (
         <Box sx={{ 
@@ -64,7 +64,7 @@ const Home = () => {
                 <Button 
                     variant="contained" 
                     sx={{ mt: 2, bgcolor: "#A7C4A0", fontWeight: "bold" }} 
-                    onClick={onSubmit}
+                    onClick={handleSubmit}
                 >
                     Submit
                 </Button>
