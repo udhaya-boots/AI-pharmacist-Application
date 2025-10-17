@@ -4,6 +4,7 @@ import PrescriptionPage from "./pages/Prescription";
 import SideBar from "./components/SideBar";
 import { PharmacistProvider } from "./context/PharmacistContext";
 import PharmacistProfile from "./components/PharmacistProfile";
+import { useState } from "react";
 // function App() {
 //   // const [prescriptions, setPrescriptions] = useState([]);
 //   // const [editingId, setEditingId] = useState(null);
@@ -185,14 +186,16 @@ import PharmacistProfile from "./components/PharmacistProfile";
 
 
 function App() {
+      const [loggedIn, setloggedIn] = useState(true);
+  
     return (
       <PharmacistProvider>
         <BrowserRouter>
           <div className="flex min-h-screen bg-gray-50 font-sans text-gray-800">
-            <SideBar />
+            <SideBar loggedIn={loggedIn}/>
             <main className="flex-1">
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home loggedIn={loggedIn} setloggedIn={setloggedIn}/>} />
                 <Route path="/prescriptions" element={<PrescriptionPage />} />
 
                 <Route path="/profile" element={<PharmacistProfile />} />
