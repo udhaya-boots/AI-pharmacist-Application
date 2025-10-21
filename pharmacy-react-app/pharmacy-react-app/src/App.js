@@ -10,8 +10,8 @@ function App() {
   return (
     <UserProvider>
       <BrowserRouter>
-        <Box sx={{ minHeight: "100vh", bgcolor: "#F3E9D2" }}>
-          <Header />
+        {/* <Header /> */}
+        <Box sx={{ minHeight: "60vh", bgcolor: "#F3E9D2" }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<UserProfile />} />

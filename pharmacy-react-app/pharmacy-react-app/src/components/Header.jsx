@@ -47,22 +47,22 @@ const Header = ({ user }) => {
     };
 
     return (
-        <AppBar position="static" sx={{ bgcolor: '#A7C4A0', boxShadow: 2 }}>
+        <AppBar position="static" sx={{ bgcolor:'#f6f6daff', boxShadow: 2 }}>
             <Toolbar>
-                <IconButton
+                {/* <IconButton
                     color="inherit"
                     onClick={handleHome}
-                    sx={{ mr: 2 }}
+                   
                 >
                     <HomeIcon />
-                </IconButton>
+                </IconButton> */}
                 
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
                     AI Pharmacy
-                </Typography>
+                </Typography> */}
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body1" sx={{ mr: 2, display: { xs: 'none', sm: 'block' } }}>
+                    <Typography variant="body1" sx={{ display: { xs: 'none', sm: 'block' } }}>
                         Welcome, {user?.name || 'Peter'}
                     </Typography>
                     

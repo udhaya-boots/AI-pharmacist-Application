@@ -1,11 +1,24 @@
-import { TextField, Button, Snackbar, Alert, Box, Typography, Paper } from "@mui/material";
+import {
+  TextField,
+  Snackbar,
+  Alert,
+  Box,
+  Typography,
+  Paper,
+  useMediaQuery,
+  useTheme,
+  Stack,
+} from "@mui/material";
+import MicIcon from "@mui/icons-material/Mic";
+import StopIcon from "@mui/icons-material/Stop";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useUser } from "./context/UserContext";
 import useGeneratePrescription from "./hooks/useGeneratePrescription";
+import useAudioFunctions from "./hooks/useAudioFunctions";
+import Header from "./components/Header";
 
 const Home = () => {
   const { user } = useUser();
-
-  // ✅ Use your custom hook
   const {
     symptoms,
     setSymptoms,
@@ -15,85 +28,166 @@ const Home = () => {
     handleSubmit,
   } = useGeneratePrescription();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { startRecording, handlePlay, stopRecording, isRecording, audioUrl } = useAudioFunctions();
+
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 64px)",
-        bgcolor: "#F3E9D2",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        p: 3,
-      }}
-    >
-      <Paper
-        elevation={10}
+    <>
+
+      <Header />
+      <Box
         sx={{
-          p: 4,
-          width: 400,
-          bgcolor: "#C7D3B0",
-          borderRadius: 5,
-          boxShadow: "0 0 20px #A7C4A0",
+          minHeight:" 100vh",
+          bgcolor: "#f6f6daff",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "start",
+          justifyContent: "flex-start",
+          px: 2,
         }}
       >
         <Typography
-          variant="h5"
-          component="h1"
-          sx={{ mb: 3, textAlign: "center" }}
+          variant={isMobile ? "h3" : "h2"}
+          align="center"
+          sx={{ mt: 2, color: "#223322", fontWeight: 600, letterSpacing: 0.2, mt: 2 }}
         >
-          Hello {user?.name || "Peter"}
+          Hi {user?.name || "User"}, how are you?
         </Typography>
-
-        <TextField
-          label="Tell me how are you feeling today"
-          multiline
-          fullWidth
-          minRows={3}
-          value={symptoms}
-          onChange={(e) => setSymptoms(e.target.value)}
-          sx={{ bgcolor: "#E9F1DD", borderRadius: 2 }}
-        />
-
-        <Button
-          variant="contained"
-          sx={{ mt: 2, bgcolor: "#A7C4A0", fontWeight: "bold" }}
-          onClick={handleSubmit}
+        <Paper
+          elevation={3}
+          onSubmit={handleSubmit}
+          component="form"
+          sx={{
+            p: isMobile ? 0.5 : 2,
+            width: isMobile ? "100%" : "40vw",
+            bgcolor: "#F5F8EF",
+            borderRadius: 5,
+            boxShadow: "0 2px 18px 0 rgba(60,70,50,0.08)",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
-          Submit
-        </Button>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              bgcolor: "#F0F2F5",
+              borderRadius: 5,
+              p: 2,
+              boxShadow: "inset 0 1px 2px rgba(40,40,40,0.04)",
+            }}
+          >
+            <TextField
+              variant="standard"
+              placeholder="Tell me how you are feeling today..."
+              fullWidth
+              multiline
+              minRows={2}
+              InputProps={{
+                disableUnderline: true,
+                sx: {
+                  fontSize: "1rem",
+                  color: "black",
+                  opacity: 1,
+                  paddingTop: "8px",
+                },
+              }}
+              value={symptoms}
+              onChange={(e) => setSymptoms(e.target.value)}
+              sx={{
+                mr: 1,
+                ".MuiInputBase-input": { resize: "none" },
+              }}
+            />
+            <Stack direction="row" justifyContent="center" spacing={2}>
+              <MicIcon
+                variant="contained"
+                disabled={isRecording}
+                onClick={startRecording}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  border: "2px solid transparent",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    borderRadius: '50%',
+                    transform: "scale(1.4)",
+                    color: 'lightblue',
+                  },
+                }}
+              />
 
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
+
+              <StopIcon
+                variant="contained"
+                disabled={!isRecording}
+                onClick={stopRecording}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  border: "2px solid transparent",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    borderRadius: '50%',
+                    transform: "scale(1.4)",
+                    color: 'tomato',
+                  },
+                }}
+              />
+
+
+              <PlayArrowIcon
+                variant="contained"
+                disabled={!audioUrl || isRecording}
+                onClick={handlePlay}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  border: "2px solid transparent",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    borderRadius: '50%',
+                    transform: "scale(1.4)",
+                    color: "green",
+                  },
+                }}
+              />
+
+            </Stack>
+
+          </Box>
+          {error && (
+            <Alert severity="error" sx={{ mt: 3 }}>
+              {error}
+            </Alert>
+          )}
+        </Paper>
+        <Snackbar
+          open={notificationMsg}
+          autoHideDuration={10000}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="info" sx={{ width: "100%" }}>
+            You will be notified when the prescription is ready
           </Alert>
-        )}
-      </Paper>
-
-      {/* Notification Snackbar */}
-      <Snackbar
-        open={notificationMsg}
-        autoHideDuration={12000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity="info" sx={{ width: "100%" }}>
-          You will be notified when the prescription is ready
-        </Alert>
-      </Snackbar>
-
-      {/* Prescription Snackbar */}
-      <Snackbar
-        open={!!prescription}
-        autoHideDuration={8000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity="success" sx={{ width: "100%" }}>
-          {typeof prescription === "string"
-            ? prescription
-            : "Prescription generated successfully!"}
-        </Alert>
-      </Snackbar>
-    </Box>
+        </Snackbar>
+        <Snackbar
+          open={!!prescription}
+          autoHideDuration={8000}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="success" sx={{ width: "100%" }}>
+            {typeof prescription === "string"
+              ? prescription
+              : "Prescription generated successfully!"}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </>
   );
 };
 
