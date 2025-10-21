@@ -47,25 +47,10 @@ const Header = ({ user }) => {
     };
 
     return (
-        <AppBar position="static" sx={{ bgcolor:'#f6f6daff', boxShadow: 2 }}>
-            <Toolbar>
-                {/* <IconButton
-                    color="inherit"
-                    onClick={handleHome}
-                   
-                >
-                    <HomeIcon />
-                </IconButton> */}
-                
-                {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-                    AI Pharmacy
-                </Typography> */}
+        <AppBar position="static" sx={{ bgcolor:'#f6f6daff', boxShadow: 2,}}>
+         
+         <Toolbar sx={{justifyContent: 'flex-end' }}>
 
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body1" sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        Welcome, {user?.name || 'Peter'}
-                    </Typography>
-                    
                     <IconButton
                         size="large"
                         aria-label="account of current user"
@@ -113,8 +98,7 @@ const Header = ({ user }) => {
                             Logout
                         </MenuItem>
                     </Menu>
-                </Box>
-            </Toolbar>
+         </Toolbar>
         </AppBar>
     );
 };

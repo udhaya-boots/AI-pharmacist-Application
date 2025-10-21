@@ -1,7 +1,10 @@
+
+
 import {
   TextField,
   Snackbar,
   Alert,
+  
   Box,
   Typography,
   Paper,
@@ -16,6 +19,7 @@ import { useUser } from "./context/UserContext";
 import useGeneratePrescription from "./hooks/useGeneratePrescription";
 import useAudioFunctions from "./hooks/useAudioFunctions";
 import Header from "./components/Header";
+import { Services } from './components/Services';
 
 const Home = () => {
   const { user } = useUser();
@@ -38,7 +42,7 @@ const Home = () => {
       <Header />
       <Box
         sx={{
-          minHeight:" 100vh",
+          minHeight: " 100vh",
           bgcolor: "#f6f6daff",
           display: "flex",
           flexDirection: "column",
@@ -47,6 +51,7 @@ const Home = () => {
           px: 2,
         }}
       >
+
         <Typography
           variant={isMobile ? "h3" : "h2"}
           align="center"
@@ -166,7 +171,7 @@ const Home = () => {
             </Alert>
           )}
         </Paper>
-        <Snackbar
+        {/* <Snackbar
           open={notificationMsg}
           autoHideDuration={10000}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -185,7 +190,9 @@ const Home = () => {
               ? prescription
               : "Prescription generated successfully!"}
           </Alert>
-        </Snackbar>
+        </Snackbar> */}
+        <br />
+ <Services/>
       </Box>
     </>
   );
