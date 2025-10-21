@@ -1,10 +1,7 @@
-
-
 import {
   TextField,
   Snackbar,
   Alert,
-  
   Box,
   Typography,
   Paper,
@@ -19,7 +16,7 @@ import { useUser } from "./context/UserContext";
 import useGeneratePrescription from "./hooks/useGeneratePrescription";
 import useAudioFunctions from "./hooks/useAudioFunctions";
 import Header from "./components/Header";
-import { Services } from './components/Services';
+import { Services } from "./components/Services";
 
 const Home = () => {
   const { user } = useUser();
@@ -34,52 +31,65 @@ const Home = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { startRecording, handlePlay, stopRecording, isRecording, audioUrl } = useAudioFunctions();
+  const { startRecording, handlePlay, stopRecording, isRecording, audioUrl } =
+    useAudioFunctions();
 
   return (
     <>
-
       <Header />
+
       <Box
         sx={{
-          minHeight: " 100vh",
+          minHeight: "100vh",
           bgcolor: "#f6f6daff",
           display: "flex",
           flexDirection: "column",
-          alignItems: "start",
+          alignItems: "center",
           justifyContent: "flex-start",
-          px: 2,
+          px: { xs: 2, sm: 4, md: 8 },
+          py: { xs: 2, sm: 4 },
         }}
       >
-
+        {/* Greeting Section */}
         <Typography
-          variant={isMobile ? "h3" : "h2"}
+          variant={isMobile ? "h4" : "h2"}
           align="center"
-          sx={{ mt: 2, color: "#223322", fontWeight: 600, letterSpacing: 0.2, mt: 2 }}
+          sx={{
+            mt: { xs: 2, sm: 3 },
+            mb: { xs: 1, sm: 2 },
+            color: "#223322",
+            fontWeight: 600,
+            letterSpacing: 0.2,
+          }}
         >
           Hi {user?.name || "User"}, how are you?
         </Typography>
+
+        {/* Input Form */}
         <Paper
           elevation={3}
-          onSubmit={handleSubmit}
           component="form"
+          onSubmit={handleSubmit}
           sx={{
-            p: isMobile ? 0.5 : 2,
-            width: isMobile ? "100%" : "40vw",
+            width: { xs: "100%", sm: "80%", md: "60%", lg: "40%" },
             bgcolor: "#F5F8EF",
             borderRadius: 5,
+            p: { xs: 1.5, sm: 3 },
             boxShadow: "0 2px 18px 0 rgba(60,70,50,0.08)",
             display: "flex",
             flexDirection: "column",
+            gap: 2,
           }}
         >
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "stretch", sm: "center" },
+              gap: { xs: 2, sm: 1 },
               bgcolor: "#F0F2F5",
               borderRadius: 5,
-              p: 2,
+              p: { xs: 2, sm: 2.5 },
               boxShadow: "inset 0 1px 2px rgba(40,40,40,0.04)",
             }}
           >
@@ -88,7 +98,7 @@ const Home = () => {
               placeholder="Tell me how you are feeling today..."
               fullWidth
               multiline
-              minRows={2}
+              minRows={isMobile ? 3 : 2}
               InputProps={{
                 disableUnderline: true,
                 sx: {
@@ -101,77 +111,78 @@ const Home = () => {
               value={symptoms}
               onChange={(e) => setSymptoms(e.target.value)}
               sx={{
-                mr: 1,
+                flexGrow: 1,
                 ".MuiInputBase-input": { resize: "none" },
               }}
             />
-            <Stack direction="row" justifyContent="center" spacing={2}>
+
+            {/* Mic / Stop / Play Buttons */}
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={isMobile ? 3 : 2}
+              sx={{
+                alignSelf: isMobile ? "center" : "flex-end",
+              }}
+            >
               <MicIcon
-                variant="contained"
-                disabled={isRecording}
                 onClick={startRecording}
                 sx={{
-                  borderRadius: 2,
-                  textTransform: "none",
-                  border: "2px solid transparent",
-                  transition: "all 0.3s ease",
+                  fontSize: isMobile ? 36 : 30,
                   cursor: "pointer",
+                  color: isRecording ? "gray" : "inherit",
+                  transition: "transform 0.3s",
                   "&:hover": {
-                    borderRadius: '50%',
-                    transform: "scale(1.4)",
-                    color: 'lightblue',
+                    transform: "scale(1.3)",
+                    color: "lightblue",
                   },
                 }}
               />
-
 
               <StopIcon
-                variant="contained"
-                disabled={!isRecording}
                 onClick={stopRecording}
                 sx={{
-                  borderRadius: 2,
-                  textTransform: "none",
-                  border: "2px solid transparent",
-                  transition: "all 0.3s ease",
+                  fontSize: isMobile ? 36 : 30,
                   cursor: "pointer",
+                  color: !isRecording ? "gray" : "inherit",
+                  transition: "transform 0.3s",
                   "&:hover": {
-                    borderRadius: '50%',
-                    transform: "scale(1.4)",
-                    color: 'tomato',
+                    transform: "scale(1.3)",
+                    color: "tomato",
                   },
                 }}
               />
-
 
               <PlayArrowIcon
-                variant="contained"
-                disabled={!audioUrl || isRecording}
                 onClick={handlePlay}
                 sx={{
-                  borderRadius: 2,
-                  textTransform: "none",
-                  border: "2px solid transparent",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
+                  fontSize: isMobile ? 36 : 30,
+                  cursor: !audioUrl ? "not-allowed" : "pointer",
+                  color: !audioUrl || isRecording ? "gray" : "inherit",
+                  transition: "transform 0.3s",
                   "&:hover": {
-                    borderRadius: '50%',
-                    transform: "scale(1.4)",
-                    color: "green",
+                    transform: audioUrl ? "scale(1.3)" : "none",
+                    color: audioUrl ? "green" : "gray",
                   },
                 }}
               />
-
             </Stack>
-
           </Box>
+
           {error && (
-            <Alert severity="error" sx={{ mt: 3 }}>
+            <Alert severity="error" sx={{ mt: 1 }}>
               {error}
             </Alert>
           )}
         </Paper>
-        {/* <Snackbar
+
+        {/* Services Section */}
+        <Box sx={{ width: "100%", mt: { xs: 4, sm: 6 } }}>
+          <Services isMobile={isMobile} />
+        </Box>
+
+        {/* Optional Snackbar Section (kept for future use)
+        <Snackbar
           open={notificationMsg}
           autoHideDuration={10000}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -180,6 +191,7 @@ const Home = () => {
             You will be notified when the prescription is ready
           </Alert>
         </Snackbar>
+
         <Snackbar
           open={!!prescription}
           autoHideDuration={8000}
@@ -191,8 +203,6 @@ const Home = () => {
               : "Prescription generated successfully!"}
           </Alert>
         </Snackbar> */}
-        <br />
- <Services/>
       </Box>
     </>
   );

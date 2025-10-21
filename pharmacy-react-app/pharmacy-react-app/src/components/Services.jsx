@@ -1,96 +1,148 @@
-import * as React from 'react';
-import { Box, Grid, Typography, Card, CardMedia, CardContent, CardActions, Button } from '@mui/material';
-import {
-    Schedule as FileClock,
-    CheckCircle as FileCheck,
-    Cancel as FileX,
-} from '@mui/icons-material';
+import { Box, Grid, Typography, Card, CardMedia, CardContent } from '@mui/material';
 
-export const Services = () => {
-    // You could later map over a list of cards for scalability
-    return (
-        <Box sx={{ mt: 10, minWidth: '90vw', minHeight: '40vh' }}>
-            <Grid container spacing={3}>
+export const Services = ({ isMobile }) => {
+  return (
+    <>
+      {/* Header Text */}
+      <Typography
+        variant={isMobile ? 'h4' : 'h3'}
+        align="center"
+        sx={{ mt: 2, color: '#223322', fontWeight: 600, letterSpacing: 0.2 }}
+      >
+        Book an appointment for an in-clinic consultation
+      </Typography>
 
-                {/* --- New --- */}
-                <Grid item xs={12} sm={4} lg={3}>
-                    <Card sx={{  maxWidth: '20vw',minHeight:'40vh' }}>
-                        <CardMedia
-                            sx={{ height: 200 }}
-                            image="https://img.freepik.com/free-photo/doctor-offering-medical-teleconsultation_23-2149329013.jpg?semt=ais_hybrid&w=740&q=80"
-                            title="New Requests"
-                        />
-                        <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                                <FileClock sx={{ fontSize: 36, color: '#6366f1' }} />
-                                <Typography variant="h5" component="div" fontWeight={700}>
-                                    Video Consultation
-                                </Typography>
-                            </Box>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                Connect within 60 seconds
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" >View</Button>
-                            <Button size="small">Details</Button>
-                        </CardActions>
-                    </Card>
-                </Grid>
+      <Typography
+        variant={isMobile ? 'h6' : 'h5'}
+        align="center"
+        sx={{ color: '#223322', fontWeight: 400, letterSpacing: 0.2, mb: 4 }}
+      >
+        Find experienced doctors across all specialities.
+      </Typography>
 
-                {/* --- Reviewed --- */}
-                <Grid item xs={12} sm={4} lg={3}>
-                    <Card sx={{  maxWidth: '20vw',minHeight:'40vh' }}>
-                        <CardMedia
-                            sx={{ height: 200 }}
-                            image="https://images.pexels.com/photos/9629677/pexels-photo-9629677.jpeg?cs=srgb&dl=pexels-ivan-samkov-9629677.jpg&fm=jpg"
-                            title="New Requests"
-                        />
-                        <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                                <FileClock sx={{ fontSize: 36, color: '#6366f1' }} />
-                                <Typography variant="h5" component="div" fontWeight={700}>
-                                    Lab Tests
-                                </Typography>
-                            </Box>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                               Safe and trusted lab sets 
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" >View</Button>
-                            <Button size="small">Details</Button>
-                        </CardActions>
-                    </Card>
-                </Grid>
+      {/* Card Section */}
+      <Box
+        sx={{
+          mt: 6,
+          px: { xs: 2, sm: 4, md: 8 },
+          minWidth: '100%',
+          minHeight: '40vh',
+        }}
+      >
+        <Grid container spacing={3} justifyContent="center">
+          {/* Dentist */}
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Card
+              sx={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 3,
+                boxShadow: 3,
+                transition: 'transform 0.3s',
+                '&:hover': { transform: 'scale(1.03)' },
+              }}
+            >
+              <CardMedia
+                sx={{ height: { xs: 160, sm: 200 } }}
+                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9xpJvboXsSpc1diJXN_7-CKlCPR3GxlPQ2g&s"
+                title="Dentist"
+              />
+              <CardContent>
+                <Typography variant="h6" component="div" fontWeight={700}>
+                  Dentist
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Schedule a dental checkup
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-                {/* --- Closed --- */}
-                <Grid item xs={12} sm={4} lg={3}>
-                    <Card sx={{  maxWidth: '20vw',minHeight:'40vh' }}>
-                        <CardMedia
-                            sx={{ height: 200 }}
-                            image="https://img.freepik.com/free-photo/doctor-offering-medical-teleconsultation_23-2149329013.jpg?semt=ais_hybrid&w=740&q=80"
-                            title="New Requests"
-                        />
-                        <CardContent>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
-                                <FileClock sx={{ fontSize: 36, color: '#6366f1' }} />
-                                <Typography variant="h5" component="div" fontWeight={700}>
-                                    Surgeries
-                                </Typography>
-                            </Box>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                              Safe and Trusted surgery centers 
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" >View</Button>
-                            <Button size="small">Details</Button>
-                        </CardActions>
-                    </Card>
-                </Grid>
+          {/* Gynecologist */}
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Card
+              sx={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 3,
+                boxShadow: 3,
+                transition: 'transform 0.3s',
+                '&:hover': { transform: 'scale(1.03)' },
+              }}
+            >
+              <CardMedia
+                sx={{ height: { xs: 160, sm: 200 } }}
+                image="https://images.pexels.com/photos/7089018/pexels-photo-7089018.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                title="Gynecologist/Obstetrician"
+              />
+              <CardContent>
+                <Typography variant="h6" component="div" fontWeight={700}>
+                  Gynecologist/Obstetrician
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Explore for women's health, pregnancy, and infertility treatments.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-            </Grid>
-        </Box>
-    );
+          {/* Dietician */}
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Card
+              sx={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 3,
+                boxShadow: 3,
+                transition: 'transform 0.3s',
+                '&:hover': { transform: 'scale(1.03)' },
+              }}
+            >
+              <CardMedia
+                sx={{ height: { xs: 160, sm: 200 } }}
+                image="https://www.shutterstock.com/image-photo/health-beauty-professional-dietician-doctor-600nw-2574231063.jpg"
+                title="Dietician/Nutrition"
+              />
+              <CardContent>
+                <Typography variant="h6" component="div" fontWeight={700}>
+                  Dietician/Nutrition
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Get guidance on eating, weight, and sports nutrition.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* General Surgeon */}
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Card
+              sx={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 3,
+                boxShadow: 3,
+                transition: 'transform 0.3s',
+                '&:hover': { transform: 'scale(1.03)' },
+              }}
+            >
+              <CardMedia
+                sx={{ height: { xs: 160, sm: 200 } }}
+                image="https://img.freepik.com/free-photo/surgeon-team-uniform-performs-operation-patient-cardiac-surgery-clinic-modern-medicine-professional-team-surgeons-health_657921-62.jpg?semt=ais_hybrid&w=740&q=80"
+                title="General Surgeon"
+              />
+              <CardContent>
+                <Typography variant="h6" component="div" fontWeight={700}>
+                  General Surgeon
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Need to get operated? Find the right surgeon.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Box>
+    </>
+  );
 };
