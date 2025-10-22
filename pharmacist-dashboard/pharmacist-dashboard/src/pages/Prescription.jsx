@@ -18,52 +18,7 @@ const PrescriptionPage = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [type, setType] = useState('success');
 
-    // Handle prescription editing
-    // const handleSave = (id, updatedText) => {
-    //     const updatedPrescriptions = prescriptions.map((item) =>
-    //         item._id === id ? { ...item, llmPrescription: updatedText } : item
-    //     );
-    //     setPrescriptions(updatedPrescriptions);
-    //     setType('success');
-    //     setAlertMessage('Prescription updated successfully!');
-    //     setShowAlert(true);
-    // };
-
-    // // Handle pharmacist notes
-    // const handleSaveNotes = (id, notes) => {
-    //     if (!notes.trim()) {
-    //         setType('error');
-    //         setAlertMessage('Please add a note before saving.');
-    //         setShowAlert(true);
-    //         return;
-    //     }
-
-    //     const updatedPrescriptions = prescriptions.map((item) =>
-    //         item._id === id ? { ...item, notes } : item
-    //     );
-    //     setPrescriptions(updatedPrescriptions);
-    //     setType('success');
-    //     setAlertMessage('Note added successfully!');
-    //     setShowAlert(true);
-    // };
-
-    // // Change status
-    // const handleStatusChange = (id, newStatus) => {
-    //     const updatedPrescriptions = prescriptions.map((item) =>
-    //         item._id === id ? { ...item, status: newStatus } : item
-    //     );
-    //     setPrescriptions(updatedPrescriptions);
-    // };
-
-    // // Get color classes for status badges
-    // const getStatusColor = (status) => {
-    //     switch (status) {
-    //         case 'new': return 'text-indigo-600 bg-indigo-50';
-    //         case 'reviewed': return 'text-green-600 bg-green-50';
-    //         case 'closed': return 'text-red-600 bg-red-50';
-    //         default: return 'text-gray-600 bg-gray-50';
-    //     }
-    // };
+   
 
     return (
         <>

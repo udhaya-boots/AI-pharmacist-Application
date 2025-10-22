@@ -12,6 +12,7 @@ import { usePharmacist } from "../context/PharmacistContext";
 const SideBar = ({ loggedIn }) => {
     const navigate = useNavigate();
     const { pharmacist, logout } = usePharmacist();
+
     
     const handlePrescriptionsClick = () => {
         navigate('/prescriptions');
@@ -66,7 +67,7 @@ const SideBar = ({ loggedIn }) => {
                                     .split(' ')
                                     .map((n) => n[0])
                                     .join('')
-                                : 'JP'}
+                                : 'XO'}
                         </div>
                         <div className="flex-1">
                             <p className="text-sm font-medium">

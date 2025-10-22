@@ -6,27 +6,31 @@ import { PharmacistProvider } from "./context/PharmacistContext";
 import { useState } from "react";
 import PharmacistProfile from "./pages/PharmacistProfile";
 
-
 function App() {
-      const [loggedIn, setloggedIn] = useState(true);
-  
-    return (
+  const [loggedIn, setloggedIn] = useState(true);
+
+  return (
+    <BrowserRouter>
       <PharmacistProvider>
-        <BrowserRouter>
-          <div className="flex min-h-screen bg-gray-50 font-sans text-gray-800">
-            <SideBar loggedIn={loggedIn}/>
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Home loggedIn={loggedIn} setloggedIn={setloggedIn}/>} />
-                <Route path="/prescriptions" element={<PrescriptionPage />} />
-
-                <Route path="/profile" element={<PharmacistProfile loggedIn={loggedIn}/>} />
-              </Routes>
-            </main>
-          </div>
-        </BrowserRouter>
+        <div className="flex min-h-screen bg-gray-50 font-sans text-gray-800">
+          <SideBar loggedIn={loggedIn} />
+          <main className="flex-1">
+            <Routes>
+              <Route
+                path="/"
+                element={<Home loggedIn={loggedIn} setloggedIn={setloggedIn} />}
+              />
+              <Route path="/prescriptions" element={<PrescriptionPage />} />
+              <Route
+                path="/profile"
+                element={<PharmacistProfile loggedIn={loggedIn} />}
+              />
+            </Routes>
+          </main>
+        </div>
       </PharmacistProvider>
-    );
-  }
+    </BrowserRouter>
+  );
+}
 
-  export default App;
+export default App;

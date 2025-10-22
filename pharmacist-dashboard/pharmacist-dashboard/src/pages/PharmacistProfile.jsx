@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     User,
     Mail,
@@ -15,49 +15,33 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Alert from '../components/SuccessAlert';
 import Home from '../Home';
+import { usePharmacist } from '../context/PharmacistContext';
 
 const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
+    const { pharmacist, setPharmacist } = usePharmacist();
 
-    const [pharmacistData, setPharmacistData] = useState({
-        id: 'PH001',
-        name: 'Dr. John Peter',
-        email: 'john.peter@pharmacy.com',
-        phone: '+1 (555) 234-5678',
-        licenseNumber: 'PH-12345',
-        specialization: 'Clinical Pharmacy',
-        experience: '8 years',
-        department: 'General Medicine',
-        address: '456 Medical Center Drive, City, State 12345',
-        dateJoined: '2016-03-15',
-        lastActive: new Date().toISOString(),
-        certifications: ['PharmD', 'Clinical Pharmacy Specialist', 'Medication Therapy Management'],
-        languages: ['English', 'Spanish', 'French'],
-        workSchedule: 'Monday - Friday, 9:00 AM - 6:00 PM',
-    });
-
-    const [editData, setEditData] = useState({ ...pharmacistData });
+    const [editData, setEditData] = useState({ ...pharmacist });
     const [alertMessage, setAlertMessage] = useState('');
     const [type, setType] = useState('success');
     const [showAlert, setShowAlert] = useState(false);
-    console.log(showAlert);
-    
+
     const handleEdit = () => {
         setIsEditing(true);
-        setEditData({ ...pharmacistData });
+        setEditData({ ...pharmacist });
     };
 
     const handleSave = () => {
         setType('success');
         setAlertMessage('Profile updated successfully!');
         setShowAlert(true);
-        setPharmacistData({ ...editData });
+        setPharmacist({ ...editData });
         setIsEditing(false);
     };
 
     const handleCancel = () => {
-        setEditData({ ...pharmacistData });
+        setEditData({ ...pharmacist });
         setIsEditing(false);
     };
 
@@ -86,7 +70,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                         <div className="flex flex-wrap items-center justify-between mb-4">
                             <div className="flex items-center space-x-4">
                                 <div className="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                                    {pharmacistData.name.split(' ').map(n => n[0]).join('')}
+                                    {pharmacist.name.split(' ').map(n => n[0]).join('')}
                                 </div>
                                 <div>
                                     <h1 className="text-3xl font-bold text-gray-900">
@@ -98,14 +82,14 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                                                 className="border rounded px-3 py-1 text-2xl"
                                             />
                                         ) : (
-                                            pharmacistData.name
+                                            pharmacist.name
                                         )}
                                     </h1>
                                     <p className="text-indigo-600 font-semibold text-lg">
-                                        {pharmacistData.specialization}
+                                        {pharmacist.specialization}
                                     </p>
                                     <p className="text-gray-600">
-                                        License: {pharmacistData.licenseNumber}
+                                        License: {pharmacist.licenseNumber}
                                     </p>
                                 </div>
                             </div>
@@ -164,7 +148,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                                                 className="border rounded px-2 py-1 w-full"
                                             />
                                         ) : (
-                                            <p className="font-semibold">{pharmacistData.email}</p>
+                                            <p className="font-semibold">{pharmacist.email}</p>
                                         )}
                                     </div>
                                 </div>
@@ -182,7 +166,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                                                 className="border rounded px-2 py-1 w-full"
                                             />
                                         ) : (
-                                            <p className="font-semibold">{pharmacistData.phone}</p>
+                                            <p className="font-semibold">{pharmacist.phone}</p>
                                         )}
                                     </div>
                                 </div>
@@ -200,7 +184,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                                                 rows={2}
                                             />
                                         ) : (
-                                            <p className="font-semibold">{pharmacistData.address}</p>
+                                            <p className="font-semibold">{pharmacist.address}</p>
                                         )}
                                     </div>
                                 </div>
@@ -214,15 +198,15 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                                 <span>Professional Information</span>
                             </h2>
                             <div className="space-y-3">
-                                <p><span className="text-sm text-gray-500">Department:</span> <span className="font-semibold">{pharmacistData.department}</span></p>
-                                <p><span className="text-sm text-gray-500">Experience:</span> <span className="font-semibold">{pharmacistData.experience}</span></p>
-                                <p><span className="text-sm text-gray-500">Work Schedule:</span> <span className="font-semibold">{pharmacistData.workSchedule}</span></p>
+                                <p><span className="text-sm text-gray-500">Department:</span> <span className="font-semibold">{pharmacist.department}</span></p>
+                                <p><span className="text-sm text-gray-500">Experience:</span> <span className="font-semibold">{pharmacist.experience}</span></p>
+                                <p><span className="text-sm text-gray-500">Work Schedule:</span> <span className="font-semibold">{pharmacist.workSchedule}</span></p>
                                 <div className="flex items-center space-x-3">
                                     <Calendar size={20} className="text-gray-500" />
                                     <div>
                                         <p className="text-sm text-gray-500">Date Joined</p>
                                         <p className="font-semibold">
-                                            {new Date(pharmacistData.dateJoined).toLocaleDateString()}
+                                            {new Date(pharmacist.dateJoined).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
@@ -237,7 +221,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                             <span>Certifications</span>
                         </h2>
                         <div className="flex flex-wrap gap-2">
-                            {pharmacistData.certifications.map((cert, index) => (
+                            {pharmacist.certifications.map((cert, index) => (
                                 <span
                                     key={index}
                                     className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium"
@@ -252,7 +236,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                     <div className="bg-white rounded-lg shadow-md p-6 mt-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-4">Languages</h2>
                         <div className="flex flex-wrap gap-2">
-                            {pharmacistData.languages.map((lang, index) => (
+                            {pharmacist.languages.map((lang, index) => (
                                 <span
                                     key={index}
                                     className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium"
@@ -270,7 +254,7 @@ const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
                             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                             <span className="text-green-600 font-semibold">Active</span>
                             <span className="text-gray-500">
-                                • Last active: {new Date(pharmacistData.lastActive).toLocaleString()}
+                                • Last active: {new Date(pharmacist.lastActive).toLocaleString()}
                             </span>
                         </div>
                     </div>
