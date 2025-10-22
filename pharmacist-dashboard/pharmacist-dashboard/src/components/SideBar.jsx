@@ -8,13 +8,11 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { usePharmacist } from "../context/PharmacistContext";
-// import { useState } from "react";
 
 const SideBar = ({ loggedIn }) => {
     const navigate = useNavigate();
     const { pharmacist, logout } = usePharmacist();
     
-    // const [loggedIn, setloggedIn] = useState(true);
     const handlePrescriptionsClick = () => {
         navigate('/prescriptions');
     };
@@ -22,16 +20,6 @@ const SideBar = ({ loggedIn }) => {
     const handleProfileClick = () => {
         navigate('/profile');
     };
-
-    // const handleLogout = () => {
-    //     if (loggedIn) {
-    //         logout();
-    //         setloggedIn(false);
-    //     } else {
-    //         setloggedIn(true);
-    //     }
-    //     // Add additional logout logic if needed
-    // };
 
     return (
         <>
