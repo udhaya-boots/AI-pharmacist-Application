@@ -9,7 +9,6 @@ import {
   Chip,
   Button,
 } from "@mui/material";
-import DescriptionIcon from "@mui/icons-material/Description";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { usePrescriptionHistory } from "../context/PrescriptionContext";
@@ -26,14 +25,14 @@ export const LatestPrescriptions = ({ isMobile }) => {
         new Date(b.submittedDateTime) - new Date(a.submittedDateTime)
     )
     .slice(0, 4);
-    const [expandedRows, setExpandedRows] = useState({});
-    const toggleExpand = (id) => {
-        setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
-    };
-    const truncateText = (text, limit = 120) => {
-        if (text.length <= limit) return text;
-        return text.slice(0, limit) + "...";
-    };
+  const [expandedRows, setExpandedRows] = useState({});
+  const toggleExpand = (id) => {
+    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+  const truncateText = (text, limit = 120) => {
+    if (text.length <= limit) return text;
+    return text.slice(0, limit) + "...";
+  };
   return (
     <>
       <Typography
@@ -114,21 +113,22 @@ export const LatestPrescriptions = ({ isMobile }) => {
                       fontWeight: "bold",
                       display: "flex",
                       alignItems: "center",
-                      gap: 1,
                     }}
                   >
+                    <span>
 
-                    {expandedRows[rx._id]
-                      ? rx.illnessDescription
-                      : truncateText(rx.illnessDescription, 90)}
-                    {rx.illnessDescription.length > 90 && (
-                      <Button
-                        className="text-indigo-500 text-xs ml-1 hover:underline"
-                        onClick={() => toggleExpand(rx._id)}
-                      >
-                        {expandedRows[rx._id] ? "Show Less" : "Show More"}
-                      </Button>
-                    )}
+                      {expandedRows[rx._id]
+                        ? rx.illnessDescription
+                        : truncateText(rx.illnessDescription, 90)}
+                      {rx.illnessDescription.length > 90 && (
+                        <Button
+                          className="text-indigo-500 text-xs hover:underline"
+                          onClick={() => toggleExpand(rx._id)}
+                        >
+                          {expandedRows[rx._id] ? "Show Less" : "Show More"}
+                        </Button>
+                      )}
+                    </span>
                   </Typography>
                   <Box
                     sx={{

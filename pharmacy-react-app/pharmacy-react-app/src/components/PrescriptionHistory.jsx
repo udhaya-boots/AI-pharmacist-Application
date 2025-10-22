@@ -36,14 +36,14 @@ const PrescriptionHistory = () => {
     const handleToggleExpand = (id) => {
         setExpandedId((prev) => (prev === id ? null : id));
     };
-    // const [expandedRows, setExpandedRows] = useState({});
-    // const toggleExpand = (id) => {
-    //     setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
-    // };
-    // const truncateText = (text, limit = 120) => {
-    //     if (text.length <= limit) return text;
-    //     return text.slice(0, limit) + "...";
-    // };
+    const [expandedRows, setExpandedRows] = useState({});
+    const toggleExpand = (id) => {
+        setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
+    const truncateText = (text, limit = 120) => {
+        if (text.length <= limit) return text;
+        return text.slice(0, limit) + "...";
+    };
     // const handleDownloadPDF = async (prescriptionId) => {
     //     try {
     //         setDownloading(true);
@@ -197,7 +197,7 @@ const PrescriptionHistory = () => {
                                                 }}
                                             >
                                                 <DescriptionIcon sx={{ color: "black" }} />
-{/* 
+
                                                 {expandedRows[p._id]
                                                     ? p.illnessDescription
                                                     : truncateText(p.illnessDescription, 90)}
@@ -208,8 +208,8 @@ const PrescriptionHistory = () => {
                                                     >
                                                         {expandedRows[p._id] ? "Show Less" : "Show More"}
                                                     </Button>
-                                                )} */}
-                                                {p.symptoms}
+                                                )}
+                                                {/* {p.symptoms} */}
                                             </Typography>
 
                                             <Box sx={{ display: "flex", alignItems: "center", mt: 1, }}>
