@@ -20,25 +20,12 @@ import {
     Person as PersonIcon,
     LocalHospital as MedicalIcon
 } from '@mui/icons-material';
+import { useUser } from '../context/UserContext';
 
 const UserProfile = ({ onEdit }) => {
     // Mock user data - replace with actual user data from context/props
-    const [userData, setUserData] = useState({
-        id: 'P001',
-        name: 'Peter Johnson',
-        email: 'peter.johnson@email.com',
-        phone: '+1 (555) 123-4567',
-        dateOfBirth: '1990-05-15',
-        gender: 'Male',
-        bloodType: 'O+',
-        address: '123 Main Street, City, State 12345',
-        emergencyContact: 'Jane Johnson - +1 (555) 987-6543',
-        allergies: ['Penicillin', 'Peanuts'],
-        chronicConditions: ['Hypertension'],
-        lastVisit: '2024-10-10',
-        profilePicture: null
-    });
 
+    const {user,setUser}=useUser();
     const calculateAge = (dob) => {
         const today = new Date();
         const birthDate = new Date(dob);
@@ -64,17 +51,17 @@ const UserProfile = ({ onEdit }) => {
                             fontSize: '2rem'
                         }}
                     >
-                        {userData.name.split(' ').map(n => n[0]).join('')}
+                        {user.name.split(' ').map(n => n[0]).join('')}
                     </Avatar>
                     <Box sx={{ flex: 1 }}>
                         <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2E7D32' }}>
-                            {userData.name}
+                            {user.name}
                         </Typography>
                         <Typography variant="subtitle1" sx={{ color: '#1B5E20', mt: 1 }}>
-                            Patient ID: {userData.id}
+                            Patient ID: {user.id}
                         </Typography>
                         <Typography variant="body2" sx={{ color: '#388E3C', mt: 0.5 }}>
-                            Age: {calculateAge(userData.dateOfBirth)} years • {userData.gender}
+                            Age: {calculateAge(user.dateOfBirth)} years • {user.gender}
                         </Typography>
                     </Box>
                     <IconButton 
@@ -101,7 +88,7 @@ const UserProfile = ({ onEdit }) => {
                             <EmailIcon sx={{ color: '#4CAF50', mr: 2 }} />
                             <Box>
                                 <Typography variant="body2" color="textSecondary">Email</Typography>
-                                <Typography variant="body1">{userData.email}</Typography>
+                                <Typography variant="body1">{user.email}</Typography>
                             </Box>
                         </Box>
                     </Grid>
@@ -110,7 +97,7 @@ const UserProfile = ({ onEdit }) => {
                             <PhoneIcon sx={{ color: '#4CAF50', mr: 2 }} />
                             <Box>
                                 <Typography variant="body2" color="textSecondary">Phone</Typography>
-                                <Typography variant="body1">{userData.phone}</Typography>
+                                <Typography variant="body1">{user.phone}</Typography>
                             </Box>
                         </Box>
                     </Grid>
@@ -119,7 +106,7 @@ const UserProfile = ({ onEdit }) => {
                             <LocationIcon sx={{ color: '#4CAF50', mr: 2, mt: 0.5 }} />
                             <Box>
                                 <Typography variant="body2" color="textSecondary">Address</Typography>
-                                <Typography variant="body1">{userData.address}</Typography>
+                                <Typography variant="body1">{user.address}</Typography>
                             </Box>
                         </Box>
                     </Grid>
@@ -138,7 +125,7 @@ const UserProfile = ({ onEdit }) => {
                                 Blood Type
                             </Typography>
                             <Chip 
-                                label={userData.bloodType} 
+                                label={user.bloodType} 
                                 color="error" 
                                 variant="outlined"
                                 sx={{ fontWeight: 'bold' }}
@@ -153,7 +140,7 @@ const UserProfile = ({ onEdit }) => {
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <CalendarIcon sx={{ color: '#4CAF50', mr: 1, fontSize: 'small' }} />
                                 <Typography variant="body1">
-                                    {new Date(userData.dateOfBirth).toLocaleDateString()}
+                                    {new Date(user.dateOfBirth).toLocaleDateString()}
                                 </Typography>
                             </Box>
                         </Box>
@@ -163,7 +150,7 @@ const UserProfile = ({ onEdit }) => {
                             Allergies
                         </Typography>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                            {userData.allergies.map((allergy, index) => (
+                            {user.allergies.map((allergy, index) => (
                                 <Chip 
                                     key={index}
                                     label={allergy}
@@ -179,7 +166,7 @@ const UserProfile = ({ onEdit }) => {
                             Chronic Conditions
                         </Typography>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                            {userData.chronicConditions.map((condition, index) => (
+                            {user.chronicConditions.map((condition, index) => (
                                 <Chip 
                                     key={index}
                                     label={condition}
@@ -200,7 +187,7 @@ const UserProfile = ({ onEdit }) => {
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <PersonIcon sx={{ color: '#4CAF50', mr: 2 }} />
-                    <Typography variant="body1">{userData.emergencyContact}</Typography>
+                    <Typography variant="body1">{user.emergencyContact}</Typography>
                 </Box>
             </Paper>
 
@@ -214,7 +201,7 @@ const UserProfile = ({ onEdit }) => {
                     <Box>
                         <Typography variant="body2" color="textSecondary">Last Consultation</Typography>
                         <Typography variant="body1">
-                            {new Date(userData.lastVisit).toLocaleDateString()}
+                            {new Date(user.lastVisit).toLocaleDateString()}
                         </Typography>
                     </Box>
                 </Box>

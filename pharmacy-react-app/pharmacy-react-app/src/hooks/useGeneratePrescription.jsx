@@ -9,7 +9,6 @@ const useGeneratePrescription = () => {
 
   // Submit handler
   const handleSubmit = async () => {
-    console.log('eehr');
     if (!symptoms.trim()) {
       setError("Please enter your symptoms");
       return;

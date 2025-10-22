@@ -42,7 +42,6 @@ const Header = ({ user }) => {
 
     const handleLogout = () => {
         // Add logout logic here
-        console.log('Logout clicked');
         handleClose();
     };
 
