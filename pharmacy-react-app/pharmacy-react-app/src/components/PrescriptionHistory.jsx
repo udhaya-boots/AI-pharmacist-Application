@@ -20,7 +20,9 @@ import {
     Description as DescriptionIcon,
     AssignmentTurnedIn as StatusIcon,
     PictureAsPdf as PdfIcon,
+    ArrowLeft,
 } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
 import { usePrescriptionHistory } from "../context/PrescriptionContext";
 import { API_BASE_URL } from "../services/userProfileAPI";
 
@@ -34,51 +36,51 @@ const PrescriptionHistory = () => {
     const handleToggleExpand = (id) => {
         setExpandedId((prev) => (prev === id ? null : id));
     };
-    const [expandedRows, setExpandedRows] = useState({});
-    const toggleExpand = (id) => {
-        setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
-    };
-    const truncateText = (text, limit = 120) => {
-        if (text.length <= limit) return text;
-        return text.slice(0, limit) + "...";
-    };
-    const handleDownloadPDF = async (prescriptionId) => {
-        try {
-            setDownloading(true);
+    // const [expandedRows, setExpandedRows] = useState({});
+    // const toggleExpand = (id) => {
+    //     setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+    // };
+    // const truncateText = (text, limit = 120) => {
+    //     if (text.length <= limit) return text;
+    //     return text.slice(0, limit) + "...";
+    // };
+    // const handleDownloadPDF = async (prescriptionId) => {
+    //     try {
+    //         setDownloading(true);
 
-            const response = await fetch(
-                `https://${API_BASE_URL}/api/prescriptions/pdf/${prescriptionId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/pdf",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                }
-            );
+    //         const response = await fetch(
+    //             `https://${API_BASE_URL}/api/prescriptions/pdf/${prescriptionId}`,
+    //             {
+    //                 method: "GET",
+    //                 headers: {
+    //                     "Content-Type": "application/pdf",
+    //                     Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //                 },
+    //             }
+    //         );
 
-            if (!response.ok) {
-                throw new Error("Failed to fetch PDF");
-            }
+    //         if (!response.ok) {
+    //             throw new Error("Failed to fetch PDF");
+    //         }
 
-            // Convert response to Blob and trigger download
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `prescription_${prescriptionId}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error("Error downloading PDF:", error);
-            alert("Failed to download PDF. Please try again later.");
-        } finally {
-            setDownloading(false);
-        }
-    };
-
+    //         // Convert response to Blob and trigger download
+    //         const blob = await response.blob();
+    //         const url = window.URL.createObjectURL(blob);
+    //         const a = document.createElement("a");
+    //         a.href = url;
+    //         a.download = `prescription_${prescriptionId}.pdf`;
+    //         document.body.appendChild(a);
+    //         a.click();
+    //         a.remove();
+    //         window.URL.revokeObjectURL(url);
+    //     } catch (error) {
+    //         console.error("Error downloading PDF:", error);
+    //         alert("Failed to download PDF. Please try again later.");
+    //     } finally {
+    //         setDownloading(false);
+    //     }
+    // };
+    const navigate = useNavigate();
     if (loading) {
         return (
             <Typography align="center" sx={{ mt: 4, color: "gray" }}>
@@ -111,6 +113,7 @@ const PrescriptionHistory = () => {
                     alignItems: { xs: "flex-start", sm: "center" },
                     mb: 3,
                     gap: 2,
+
                 }}
             >
                 <Typography
@@ -126,6 +129,13 @@ const PrescriptionHistory = () => {
                     <PharmacyIcon sx={{ color: "#223322", fontSize: 50 }} />
                     Prescription History
                 </Typography>
+                <Button
+                    className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800  transition-colors"
+                    onClick={() => navigate('/')}
+                >
+                    <ArrowLeft size={20} />
+                    <span className="font-medium">Go Home</span>
+                </Button>
             </Box>
 
             {/* List of prescriptions */}
@@ -163,6 +173,8 @@ const PrescriptionHistory = () => {
                                                 ? "#4CAF50"
                                                 : "#ab1414ff"
                                             }`,
+                                        transition: "transform 0.3s",
+                                        "&:hover": { transform: "scale(1.03)" },
                                     }}
                                 >
                                     <Box
@@ -185,7 +197,7 @@ const PrescriptionHistory = () => {
                                                 }}
                                             >
                                                 <DescriptionIcon sx={{ color: "black" }} />
-
+{/* 
                                                 {expandedRows[p._id]
                                                     ? p.illnessDescription
                                                     : truncateText(p.illnessDescription, 90)}
@@ -196,7 +208,8 @@ const PrescriptionHistory = () => {
                                                     >
                                                         {expandedRows[p._id] ? "Show Less" : "Show More"}
                                                     </Button>
-                                                )}
+                                                )} */}
+                                                {p.symptoms}
                                             </Typography>
 
                                             <Box sx={{ display: "flex", alignItems: "center", mt: 1, }}>

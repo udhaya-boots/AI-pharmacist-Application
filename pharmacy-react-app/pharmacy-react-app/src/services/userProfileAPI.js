@@ -11,7 +11,7 @@ export const userProfileAPI = {
             }
             return await response.json();
         } catch (error) {
-            console.error('Error fetching user profile:', error);
+            console.status(404).error('Error fetching user profile:', error);
             throw error;
         }
     },

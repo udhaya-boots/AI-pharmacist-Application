@@ -13,11 +13,12 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { usePrescriptionHistory } from "../context/PrescriptionContext";
+import { useState } from "react";
 
 
 
 export const LatestPrescriptions = ({ isMobile }) => {
-   const { prescriptions, loading } = usePrescriptionHistory();
+  const { prescriptions, loading } = usePrescriptionHistory();
   // Get the latest 4 prescriptions sorted by submission date
   const latestPrescriptions = [...prescriptions]
     .sort(
@@ -25,10 +26,16 @@ export const LatestPrescriptions = ({ isMobile }) => {
         new Date(b.submittedDateTime) - new Date(a.submittedDateTime)
     )
     .slice(0, 4);
-
+    const [expandedRows, setExpandedRows] = useState({});
+    const toggleExpand = (id) => {
+        setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
+    const truncateText = (text, limit = 120) => {
+        if (text.length <= limit) return text;
+        return text.slice(0, limit) + "...";
+    };
   return (
     <>
-      {/* Header */}
       <Typography
         variant={isMobile ? "h4" : "h3"}
         align="center"
@@ -53,7 +60,7 @@ export const LatestPrescriptions = ({ isMobile }) => {
       {/* Cards Grid */}
       <Box
         sx={{
-          mt: 6,
+          mt: 4,
           px: { xs: 2, sm: 4, md: 8 },
           minWidth: "100%",
           minHeight: "40vh",
@@ -83,7 +90,6 @@ export const LatestPrescriptions = ({ isMobile }) => {
                       mb: 1,
                     }}
                   >
-                    <DescriptionIcon sx={{ color: "#388E3C" }} />
                     <Typography
                       variant="h6"
                       component="div"
@@ -94,14 +100,36 @@ export const LatestPrescriptions = ({ isMobile }) => {
                     </Typography>
                   </Box>
 
-                  <Typography
+                  {/* <Typography
                     variant="body2"
                     sx={{ color: "text.secondary", mb: 1 }}
                     noWrap
                   >
                     {rx.illnessDescription}
-                  </Typography>
+                  </Typography> */}
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "black",
+                      fontWeight: "bold",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
 
+                    {expandedRows[rx._id]
+                      ? rx.illnessDescription
+                      : truncateText(rx.illnessDescription, 90)}
+                    {rx.illnessDescription.length > 90 && (
+                      <Button
+                        className="text-indigo-500 text-xs ml-1 hover:underline"
+                        onClick={() => toggleExpand(rx._id)}
+                      >
+                        {expandedRows[rx._id] ? "Show Less" : "Show More"}
+                      </Button>
+                    )}
+                  </Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -132,10 +160,10 @@ export const LatestPrescriptions = ({ isMobile }) => {
                       label={rx.status.toUpperCase()}
                       color={
                         rx.status.toUpperCase() === "NEW"
-                          ? "warning"
+                          ? "info"
                           : rx.status.toUpperCase() === "REVIEWED"
-                          ? "error"
-                          : "success"
+                            ? "success"
+                            : "error"
                       }
                       size="small"
                       variant="outlined"
@@ -143,21 +171,7 @@ export const LatestPrescriptions = ({ isMobile }) => {
                   </Box>
                 </CardContent>
 
-                <CardActions sx={{ p: 2, pt: 0 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="success"
-                    sx={{
-                      textTransform: "none",
-                      fontWeight: "bold",
-                      borderRadius: 2,
-                    }}
-                    onClick={() => alert(`Viewing ${rx.patientName}'s prescription`)}
-                  >
-                    View Details
-                  </Button>
-                </CardActions>
+
               </Card>
             </Grid>
           ))}
