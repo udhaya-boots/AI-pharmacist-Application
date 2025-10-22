@@ -9,6 +9,9 @@ import {
   Chip,
   Button,
 } from "@mui/material";
+
+import AddToQueueIcon from '@mui/icons-material/AddToQueue';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { usePrescriptionHistory } from "../context/PrescriptionContext";
@@ -139,7 +142,7 @@ export const LatestPrescriptions = ({ isMobile }) => {
                     }}
                   >
                     <CalendarTodayIcon
-                      sx={{ fontSize: 16, color: "#4CAF50" }}
+                      sx={{ fontSize: 16, color: "black" }}
                     />
                     <Typography variant="caption">
                       {new Date(rx.submittedDateTime).toLocaleDateString()}
@@ -153,9 +156,11 @@ export const LatestPrescriptions = ({ isMobile }) => {
                       gap: 1,
                     }}
                   >
-                    <AssignmentTurnedInIcon
-                      sx={{ fontSize: 16, color: "#81C784" }}
-                    />
+                    {rx.status.toUpperCase() === "REVIEWED" ? <AssignmentTurnedInIcon
+                      sx={{ color: "black", fontSize: "1.3rem", mr: 1 }}
+                    /> : rx.status.toUpperCase() === "NEW" ?
+                      <AddToQueueIcon sx={{ color: "black", fontSize: "1.3rem", mr: 1 }} /> : <DoDisturbIcon sx={{ color: "black", fontSize: "1.3rem", mr: 1 }} />}
+
                     <Chip
                       label={rx.status.toUpperCase()}
                       color={

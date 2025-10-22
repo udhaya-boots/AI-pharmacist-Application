@@ -22,6 +22,8 @@ import {
     PictureAsPdf as PdfIcon,
     ArrowLeft,
 } from "@mui/icons-material";
+import AddToQueueIcon from '@mui/icons-material/AddToQueue';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { useNavigate } from 'react-router-dom';
 import { usePrescriptionHistory } from "../context/PrescriptionContext";
 import { API_BASE_URL } from "../services/userProfileAPI";
@@ -103,6 +105,7 @@ const PrescriptionHistory = () => {
             }}
         >
             {/* Header */}
+
             <Box
                 sx={{
                     width: "100%",
@@ -222,9 +225,11 @@ const PrescriptionHistory = () => {
                                             </Box>
 
                                             <Box sx={{ display: "flex", alignItems: "center", mt: 1, }}>
-                                                <StatusIcon
-                                                    sx={{ color: "black", fontSize: "1rem", mr: 1 }}
-                                                />
+                                                {p.status.toUpperCase() === "REVIEWED"?<StatusIcon
+                                                    sx={{ color: "black", fontSize: "1.3rem", mr: 1 }}
+                                                />:p.status.toUpperCase() ==="NEW"?
+                                                <AddToQueueIcon sx={{ color: "black", fontSize: "1.3rem", mr: 1 }} />:<DoDisturbIcon sx={{ color: "black", fontSize: "1.3rem", mr: 1 }}/>}
+
                                                 <Chip
                                                     label={p.status.toUpperCase()}
                                                     color={
