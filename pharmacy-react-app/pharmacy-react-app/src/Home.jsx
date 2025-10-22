@@ -16,7 +16,7 @@ import { useUser } from "./context/UserContext";
 import useGeneratePrescription from "./hooks/useGeneratePrescription";
 import useAudioFunctions from "./hooks/useAudioFunctions";
 import Header from "./components/Header";
-import { Services } from "./components/Services";
+import { LatestPrescriptions } from "./components/Services";
 
 const Home = () => {
   const { user } = useUser();
@@ -178,7 +178,7 @@ const Home = () => {
 
         {/* Services Section */}
         <Box sx={{ width: "100%", mt: { xs: 4, sm: 6 } }}>
-          <Services isMobile={isMobile} />
+          <LatestPrescriptions isMobile={isMobile} />
         </Box>
 
         {/* Optional Snackbar Section (kept for future use)

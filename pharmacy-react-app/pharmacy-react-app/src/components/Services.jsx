@@ -1,148 +1,170 @@
-import { Box, Grid, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import React from "react";
+import {
+  Box,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Chip,
+  Button,
+} from "@mui/material";
+import DescriptionIcon from "@mui/icons-material/Description";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import { usePrescriptionHistory } from "../context/PrescriptionContext";
 
-export const Services = ({ isMobile }) => {
+
+
+export const LatestPrescriptions = ({ isMobile }) => {
+   const { prescriptions, loading } = usePrescriptionHistory();
+  // Get the latest 4 prescriptions sorted by submission date
+  const latestPrescriptions = [...prescriptions]
+    .sort(
+      (a, b) =>
+        new Date(b.submittedDateTime) - new Date(a.submittedDateTime)
+    )
+    .slice(0, 4);
+
   return (
     <>
-      {/* Header Text */}
+      {/* Header */}
       <Typography
-        variant={isMobile ? 'h4' : 'h3'}
+        variant={isMobile ? "h4" : "h3"}
         align="center"
-        sx={{ mt: 2, color: '#223322', fontWeight: 600, letterSpacing: 0.2 }}
+        sx={{ mt: 2, color: "#223322", fontWeight: 600, letterSpacing: 0.2 }}
       >
-        Book an appointment for an in-clinic consultation
+        Latest Prescriptions
       </Typography>
 
       <Typography
-        variant={isMobile ? 'h6' : 'h5'}
+        variant={isMobile ? "h6" : "h5"}
         align="center"
-        sx={{ color: '#223322', fontWeight: 400, letterSpacing: 0.2, mb: 4 }}
+        sx={{
+          color: "#223322",
+          fontWeight: 400,
+          letterSpacing: 0.2,
+          mb: 4,
+        }}
       >
-        Find experienced doctors across all specialities.
+        Review the most recent prescriptions issued by your doctors.
       </Typography>
 
-      {/* Card Section */}
+      {/* Cards Grid */}
       <Box
         sx={{
           mt: 6,
           px: { xs: 2, sm: 4, md: 8 },
-          minWidth: '100%',
-          minHeight: '40vh',
+          minWidth: "100%",
+          minHeight: "40vh",
         }}
       >
         <Grid container spacing={3} justifyContent="center">
-          {/* Dentist */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card
-              sx={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: 'transform 0.3s',
-                '&:hover': { transform: 'scale(1.03)' },
-              }}
-            >
-              <CardMedia
-                sx={{ height: { xs: 160, sm: 200 } }}
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9xpJvboXsSpc1diJXN_7-CKlCPR3GxlPQ2g&s"
-                title="Dentist"
-              />
-              <CardContent>
-                <Typography variant="h6" component="div" fontWeight={700}>
-                  Dentist
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Schedule a dental checkup
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          {latestPrescriptions.map((rx) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={rx._id}>
+              <Card
+                sx={{
+                  height: "100%",
+                  borderRadius: 3,
+                  boxShadow: 3,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  transition: "transform 0.3s",
+                  "&:hover": { transform: "scale(1.03)" },
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 1,
+                    }}
+                  >
+                    <DescriptionIcon sx={{ color: "#388E3C" }} />
+                    <Typography
+                      variant="h6"
+                      component="div"
+                      fontWeight={700}
+                      noWrap
+                    >
+                      {rx.patientName}
+                    </Typography>
+                  </Box>
 
-          {/* Gynecologist */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card
-              sx={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: 'transform 0.3s',
-                '&:hover': { transform: 'scale(1.03)' },
-              }}
-            >
-              <CardMedia
-                sx={{ height: { xs: 160, sm: 200 } }}
-                image="https://images.pexels.com/photos/7089018/pexels-photo-7089018.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                title="Gynecologist/Obstetrician"
-              />
-              <CardContent>
-                <Typography variant="h6" component="div" fontWeight={700}>
-                  Gynecologist/Obstetrician
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Explore for women's health, pregnancy, and infertility treatments.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mb: 1 }}
+                    noWrap
+                  >
+                    {rx.illnessDescription}
+                  </Typography>
 
-          {/* Dietician */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card
-              sx={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: 'transform 0.3s',
-                '&:hover': { transform: 'scale(1.03)' },
-              }}
-            >
-              <CardMedia
-                sx={{ height: { xs: 160, sm: 200 } }}
-                image="https://www.shutterstock.com/image-photo/health-beauty-professional-dietician-doctor-600nw-2574231063.jpg"
-                title="Dietician/Nutrition"
-              />
-              <CardContent>
-                <Typography variant="h6" component="div" fontWeight={700}>
-                  Dietician/Nutrition
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Get guidance on eating, weight, and sports nutrition.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 1,
+                    }}
+                  >
+                    <CalendarTodayIcon
+                      sx={{ fontSize: 16, color: "#4CAF50" }}
+                    />
+                    <Typography variant="caption">
+                      {new Date(rx.submittedDateTime).toLocaleDateString()}
+                    </Typography>
+                  </Box>
 
-          {/* General Surgeon */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card
-              sx={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: 'transform 0.3s',
-                '&:hover': { transform: 'scale(1.03)' },
-              }}
-            >
-              <CardMedia
-                sx={{ height: { xs: 160, sm: 200 } }}
-                image="https://img.freepik.com/free-photo/surgeon-team-uniform-performs-operation-patient-cardiac-surgery-clinic-modern-medicine-professional-team-surgeons-health_657921-62.jpg?semt=ais_hybrid&w=740&q=80"
-                title="General Surgeon"
-              />
-              <CardContent>
-                <Typography variant="h6" component="div" fontWeight={700}>
-                  General Surgeon
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Need to get operated? Find the right surgeon.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <AssignmentTurnedInIcon
+                      sx={{ fontSize: 16, color: "#81C784" }}
+                    />
+                    <Chip
+                      label={rx.status.toUpperCase()}
+                      color={
+                        rx.status.toUpperCase() === "NEW"
+                          ? "warning"
+                          : rx.status.toUpperCase() === "REVIEWED"
+                          ? "error"
+                          : "success"
+                      }
+                      size="small"
+                      variant="outlined"
+                    />
+                  </Box>
+                </CardContent>
+
+                <CardActions sx={{ p: 2, pt: 0 }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="success"
+                    sx={{
+                      textTransform: "none",
+                      fontWeight: "bold",
+                      borderRadius: 2,
+                    }}
+                    onClick={() => alert(`Viewing ${rx.patientName}'s prescription`)}
+                  >
+                    View Details
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </>
   );
 };
+
+export default LatestPrescriptions;

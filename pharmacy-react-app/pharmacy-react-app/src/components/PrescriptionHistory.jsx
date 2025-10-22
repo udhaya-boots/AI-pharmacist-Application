@@ -29,12 +29,19 @@ const PrescriptionHistory = () => {
     const { prescriptions, loading } = usePrescriptionHistory();
     const [expandedId, setExpandedId] = useState(null);
     const [downloading, setDownloading] = useState(false);
-      const theme = useTheme();
-      const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const handleToggleExpand = (id) => {
         setExpandedId((prev) => (prev === id ? null : id));
     };
-
+    const [expandedRows, setExpandedRows] = useState({});
+    const toggleExpand = (id) => {
+        setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
+    const truncateText = (text, limit = 120) => {
+        if (text.length <= limit) return text;
+        return text.slice(0, limit) + "...";
+    };
     const handleDownloadPDF = async (prescriptionId) => {
         try {
             setDownloading(true);
@@ -101,7 +108,7 @@ const PrescriptionHistory = () => {
                     display: "flex",
                     flexDirection: { xs: "column", sm: "row" },
                     justifyContent: "space-between",
-                    alignItems: { xs: "flex-start", sm: "center"},
+                    alignItems: { xs: "flex-start", sm: "center" },
                     mb: 3,
                     gap: 2,
                 }}
@@ -116,7 +123,7 @@ const PrescriptionHistory = () => {
                         gap: 1,
                     }}
                 >
-                    <PharmacyIcon sx={{ color: "#223322" ,fontSize:50}} />
+                    <PharmacyIcon sx={{ color: "#223322", fontSize: 50 }} />
                     Prescription History
                 </Typography>
             </Box>
@@ -151,10 +158,10 @@ const PrescriptionHistory = () => {
                                         borderRadius: 3,
                                         bgcolor: "#FFFFFF",
                                         borderLeft: `6px solid ${p.status.toUpperCase() === "NEW"
-                                            ? "#FF9800"
+                                            ? "#0077ffff"
                                             : p.status.toUpperCase() === "REVIEWED"
-                                                ? "#F44336"
-                                                : "#4CAF50"
+                                                ? "#4CAF50"
+                                                : "#ab1414ff"
                                             }`,
                                     }}
                                 >
@@ -168,47 +175,58 @@ const PrescriptionHistory = () => {
                                         <Box>
 
                                             <Typography
-                                                variant="h6"
+                                                variant="body2"
                                                 sx={{
-                                                    color: "#1B5E20",
+                                                    color: "black",
                                                     fontWeight: "bold",
                                                     display: "flex",
                                                     alignItems: "center",
                                                     gap: 1,
                                                 }}
                                             >
-                                                <DescriptionIcon sx={{ color: "#388E3C" }} />
-                                                {p.illnessDescription}
+                                                <DescriptionIcon sx={{ color: "black" }} />
+
+                                                {expandedRows[p._id]
+                                                    ? p.illnessDescription
+                                                    : truncateText(p.illnessDescription, 90)}
+                                                {p.illnessDescription.length > 90 && (
+                                                    <Button
+                                                        className="text-indigo-500 text-xs ml-1 hover:underline"
+                                                        onClick={() => toggleExpand(p._id)}
+                                                    >
+                                                        {expandedRows[p._id] ? "Show Less" : "Show More"}
+                                                    </Button>
+                                                )}
                                             </Typography>
 
-                                            <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                                            <Box sx={{ display: "flex", alignItems: "center", mt: 1, }}>
                                                 <CalendarIcon
-                                                    sx={{ color: "#4CAF50", fontSize: "1rem", mr: 1 }}
                                                 />
-                                                <Typography variant="body2" color="textSecondary">
+                                                <Typography variant="body2" sx={{ mx: 1 }}
+                                                    color="textPrimary">
                                                     {new Date(p.submittedDateTime).toLocaleDateString()}
                                                 </Typography>
                                             </Box>
 
-                                            <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                                            <Box sx={{ display: "flex", alignItems: "center", mt: 1, }}>
                                                 <StatusIcon
-                                                    sx={{ color: "#81C784", fontSize: "1rem", mr: 1 }}
+                                                    sx={{ color: "black", fontSize: "1rem", mr: 1 }}
                                                 />
                                                 <Chip
                                                     label={p.status.toUpperCase()}
                                                     color={
                                                         p.status.toUpperCase() === "NEW"
-                                                            ? "warning"
+                                                            ? "info"
                                                             : p.status.toUpperCase() === "REVIEWED"
-                                                                ? "error"
-                                                                : "success"
+                                                                ? "success"
+                                                                : "error"
                                                     }
                                                     size="small"
                                                     variant="outlined"
                                                 />
                                             </Box>
                                         </Box>
-                                        <span>
+                                        {/* <span>
 
                                             <Button
                                                 variant="contained"
@@ -220,26 +238,34 @@ const PrescriptionHistory = () => {
                                             >
                                                 {downloading ? "Downloading..." : "Download PDF"}
                                             </Button>
-                                            <IconButton onClick={() => handleToggleExpand(p._id)}>
-                                                {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                            </IconButton>
-                                        </span>
+                                            </span> */}
+                                        {/* <IconButton onClick={() => handleToggleExpand(p._id)}>
+                                            {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                        </IconButton> */}
                                     </Box>
 
-                                    <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                                        <Divider sx={{ my: 2 }} />
+                                    <Divider sx={{ my: 2 }} />
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            whiteSpace: "pre-wrap",
+                                            lineHeight: 1.6,
+                                            color: "black",
+                                            fontSize: "0.95rem",
+                                        }}
+                                    >
                                         <Typography
                                             variant="body2"
                                             sx={{
                                                 whiteSpace: "pre-wrap",
                                                 lineHeight: 1.6,
-                                                color: "#2E7D32",
-                                                fontSize: "0.95rem",
-                                            }}
-                                        >
-                                            {p.llmPrescription}
-                                        </Typography>
-                                    </Collapse>
+                                                color: "black",
+                                                fontSize: "1.34rem",
+                                            }}><b>Prescription Details:</b></Typography>
+                                        {p.llmPrescription}
+                                    </Typography>
+                                    {/* <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                                    </Collapse> */}
                                 </Paper>
                             </Grid>
                         );
