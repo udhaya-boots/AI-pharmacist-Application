@@ -12,7 +12,7 @@ import { PrescriptionTable } from './components/PrescriptionTable';
 const Home = ({ loggedIn, setloggedIn }) => {
   const [prescriptions, setPrescriptions] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const { logout } = usePharmacist();
+  const { logout, isAuthenticated } = usePharmacist();
   const [llmPrescriptionText, setLlmPrescriptionText] = useState("");
   const {  summary } = useHandleOperations(
     prescriptions,
@@ -23,12 +23,8 @@ const Home = ({ loggedIn, setloggedIn }) => {
   );
 
   const handleLogout = () => {
-    if (loggedIn) {
-      logout();
-      setloggedIn(false);
-    } else {
-      setloggedIn(true);
-    }
+    logout();
+    // Redirect will be handled by the protected route
   };
 
   return (
@@ -49,7 +45,7 @@ const Home = ({ loggedIn, setloggedIn }) => {
           className="flex items-center justify-center gap-1 text-sm sm:text-base text-indigo-600 hover:text-indigo-900 transition-colors duration-200"
         >
           <LogOut size={18} />
-          <span>{loggedIn ? 'Logout' : 'Sign Up'}</span>
+          <span>{isAuthenticated ? 'Logout' : 'Sign Up'}</span>
         </button>
       </header>
 

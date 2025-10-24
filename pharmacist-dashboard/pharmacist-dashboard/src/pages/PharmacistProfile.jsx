@@ -1,285 +1,324 @@
-import { useState } from 'react';
-import {
-    User,
-    Mail,
-    Phone,
-    MapPin,
-    Calendar,
-    Shield,
-    Award,
-    Edit3,
-    Save,
-    X,
-    ArrowLeft
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import Alert from '../components/SuccessAlert';
-import Home from '../Home';
+import React, { useState, useEffect } from 'react';
 import { usePharmacist } from '../context/PharmacistContext';
 
-const PharmacistProfile = ({ loggedIn, setloggedIn }) => {
+const PharmacistProfile = () => {
+    const { isAuthenticated } = useAuth();
+    const { pharmacist, updatePharmacist } = usePharmacist();
     const [isEditing, setIsEditing] = useState(false);
-    const navigate = useNavigate();
-    const { pharmacist, setPharmacist } = usePharmacist();
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        licenseNumber: '',
+        specialization: '',
+        experience: '',
+        profilePicture: '',
+        bio: ''
+    });
 
-    const [editData, setEditData] = useState({ ...pharmacist });
-    const [alertMessage, setAlertMessage] = useState('');
-    const [type, setType] = useState('success');
-    const [showAlert, setShowAlert] = useState(false);
+    useEffect(() => {
+        if (pharmacist) {
+            setFormData({
+                firstName: pharmacist.firstName || '',
+                lastName: pharmacist.lastName || '',
+                email: pharmacist.email || '',
+                phone: pharmacist.phone || '',
+                licenseNumber: pharmacist.licenseNumber || '',
+                specialization: pharmacist.specialization || '',
+                experience: pharmacist.experience || '',
+                profilePicture: pharmacist.profilePicture || '',
+                bio: pharmacist.bio || ''
+            });
+        }
+    }, [pharmacist]);
 
-    const handleEdit = () => {
-        setIsEditing(true);
-        setEditData({ ...pharmacist });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleSave = () => {
-        setType('success');
-        setAlertMessage('Profile updated successfully!');
-        setShowAlert(true);
-        setPharmacist({ ...editData });
+        updatePharmacist(formData);
         setIsEditing(false);
     };
 
     const handleCancel = () => {
-        setEditData({ ...pharmacist });
+        if (pharmacist) {
+            setFormData({
+                firstName: pharmacist.firstName || '',
+                lastName: pharmacist.lastName || '',
+                email: pharmacist.email || '',
+                phone: pharmacist.phone || '',
+                licenseNumber: pharmacist.licenseNumber || '',
+                specialization: pharmacist.specialization || '',
+                experience: pharmacist.experience || '',
+                profilePicture: pharmacist.profilePicture || '',
+                bio: pharmacist.bio || ''
+            });
+        }
         setIsEditing(false);
     };
 
-    const handleInputChange = (field, value) => {
-        setEditData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    };
+    if (!isAuthenticated) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                    <h2 className="text-xl font-semibold mb-4">Please log in to access your profile</h2>
+                    <button 
+                        onClick={() => window.location.href = '/login'}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Go to Login
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
-            {loggedIn ? (
+            {isAuthenticated && pharmacist ? (
                 <div className="max-w-4xl mx-auto p-4 bg-gray-50 min-h-screen">
                     {/* Back Button */}
-                    <button
-                        className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800  transition-colors"
-                        onClick={() => navigate('/')}
+                    <button 
+                        onClick={() => window.history.back()}
+                        className="mb-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
                     >
-                        <ArrowLeft size={20} />
-                        <span className="font-medium">Go Home</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Back
                     </button>
 
-                    {/* Header */}
-                    <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-                        <div className="flex flex-wrap items-center justify-between mb-4">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                                    {pharmacist.name.split(' ').map(n => n[0]).join('')}
-                                </div>
-                                <div>
-                                    <h1 className="text-3xl font-bold text-gray-900">
-                                        {isEditing ? (
-                                            <input
-                                                type="text"
-                                                value={editData.name}
-                                                onChange={(e) => handleInputChange('name', e.target.value)}
-                                                className="border rounded px-3 py-1 text-2xl"
-                                            />
-                                        ) : (
-                                            pharmacist.name
-                                        )}
-                                    </h1>
-                                    <p className="text-indigo-600 font-semibold text-lg">
-                                        {pharmacist.specialization}
-                                    </p>
-                                    <p className="text-gray-600">
-                                        License: {pharmacist.licenseNumber}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex space-x-2 mt-4 sm:mt-0">
-                                {!isEditing ? (
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        {/* Header */}
+                        <div className="flex justify-between items-center mb-6">
+                            <h1 className="text-3xl font-bold text-gray-800">Pharmacist Profile</h1>
+                            {!isEditing ? (
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Edit Profile
+                                </button>
+                            ) : (
+                                <div className="flex gap-2">
                                     <button
-                                        onClick={handleEdit}
-                                        className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                                        onClick={handleSave}
+                                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
                                     >
-                                        <Edit3 size={18} />
-                                        <span>Edit Profile</span>
+                                        Save
                                     </button>
+                                    <button
+                                        onClick={handleCancel}
+                                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Profile Picture */}
+                        <div className="flex items-center mb-6">
+                            <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center mr-6">
+                                {formData.profilePicture ? (
+                                    <img 
+                                        src={formData.profilePicture} 
+                                        alt="Profile" 
+                                        className="w-24 h-24 rounded-full object-cover"
+                                    />
                                 ) : (
-                                    <>
-                                        <button
-                                            onClick={handleSave}
-                                            className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                                        >
-                                            <Save size={18} />
-                                            <span>Save</span>
-                                        </button>
-                                        <button
-                                            onClick={handleCancel}
-                                            className="flex items-center space-x-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
-                                        >
-                                            <X size={18} />
-                                            <span>Cancel</span>
-                                        </button>
-                                    </>
+                                    <svg className="w-12 h-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
                                 )}
                             </div>
+                            <div>
+                                <h2 className="text-2xl font-semibold text-gray-800">
+                                    {formData.firstName} {formData.lastName}
+                                </h2>
+                                <p className="text-gray-600">{formData.specialization}</p>
+                                <p className="text-blue-600 font-medium">License: {formData.licenseNumber}</p>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Info Sections */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Contact Info */}
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-                                <User size={24} className="text-indigo-600" />
-                                <span>Contact Information</span>
-                            </h2>
+                        {/* Profile Information */}
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {/* Personal Information */}
                             <div className="space-y-4">
-                                {/* Email */}
-                                <div className="flex items-center space-x-3">
-                                    <Mail size={20} className="text-gray-500" />
-                                    <div>
-                                        <p className="text-sm text-gray-500">Email</p>
-                                        {isEditing ? (
-                                            <input
-                                                type="email"
-                                                value={editData.email}
-                                                onChange={(e) => handleInputChange('email', e.target.value)}
-                                                className="border rounded px-2 py-1 w-full"
-                                            />
-                                        ) : (
-                                            <p className="font-semibold">{pharmacist.email}</p>
-                                        )}
-                                    </div>
+                                <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            value={formData.firstName}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.firstName || 'Not provided'}</p>
+                                    )}
                                 </div>
 
-                                {/* Phone */}
-                                <div className="flex items-center space-x-3">
-                                    <Phone size={20} className="text-gray-500" />
-                                    <div>
-                                        <p className="text-sm text-gray-500">Phone</p>
-                                        {isEditing ? (
-                                            <input
-                                                type="tel"
-                                                value={editData.phone}
-                                                onChange={(e) => handleInputChange('phone', e.target.value)}
-                                                className="border rounded px-2 py-1 w-full"
-                                            />
-                                        ) : (
-                                            <p className="font-semibold">{pharmacist.phone}</p>
-                                        )}
-                                    </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            value={formData.lastName}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.lastName || 'Not provided'}</p>
+                                    )}
                                 </div>
 
-                                {/* Address */}
-                                <div className="flex items-start space-x-3">
-                                    <MapPin size={20} className="text-gray-500 mt-1" />
-                                    <div>
-                                        <p className="text-sm text-gray-500">Address</p>
-                                        {isEditing ? (
-                                            <textarea
-                                                value={editData.address}
-                                                onChange={(e) => handleInputChange('address', e.target.value)}
-                                                className="border rounded px-2 py-1 w-full"
-                                                rows={2}
-                                            />
-                                        ) : (
-                                            <p className="font-semibold">{pharmacist.address}</p>
-                                        )}
-                                    </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.email || 'Not provided'}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.phone || 'Not provided'}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Professional Information */}
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Professional Information</h3>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">License Number</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="licenseNumber"
+                                            value={formData.licenseNumber}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.licenseNumber || 'Not provided'}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Specialization</label>
+                                    {isEditing ? (
+                                        <select
+                                            name="specialization"
+                                            value={formData.specialization}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            <option value="">Select Specialization</option>
+                                            <option value="Clinical Pharmacy">Clinical Pharmacy</option>
+                                            <option value="Hospital Pharmacy">Hospital Pharmacy</option>
+                                            <option value="Community Pharmacy">Community Pharmacy</option>
+                                            <option value="Industrial Pharmacy">Industrial Pharmacy</option>
+                                            <option value="Pharmaceutical Research">Pharmaceutical Research</option>
+                                            <option value="Regulatory Affairs">Regulatory Affairs</option>
+                                        </select>
+                                    ) : (
+                                        <p className="text-gray-900">{formData.specialization || 'Not provided'}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Years of Experience</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="number"
+                                            name="experience"
+                                            value={formData.experience}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            max="50"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.experience ? `${formData.experience} years` : 'Not provided'}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Profile Picture URL</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="url"
+                                            name="profilePicture"
+                                            value={formData.profilePicture}
+                                            onChange={handleInputChange}
+                                            placeholder="https://example.com/profile.jpg"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    ) : (
+                                        <p className="text-gray-900">{formData.profilePicture || 'Not provided'}</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Professional Info */}
-                        <div className="bg-white rounded-lg shadow-md p-6">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-                                <Shield size={24} className="text-indigo-600" />
-                                <span>Professional Information</span>
-                            </h2>
-                            <div className="space-y-3">
-                                <p><span className="text-sm text-gray-500">Department:</span> <span className="font-semibold">{pharmacist.department}</span></p>
-                                <p><span className="text-sm text-gray-500">Experience:</span> <span className="font-semibold">{pharmacist.experience}</span></p>
-                                <p><span className="text-sm text-gray-500">Work Schedule:</span> <span className="font-semibold">{pharmacist.workSchedule}</span></p>
-                                <div className="flex items-center space-x-3">
-                                    <Calendar size={20} className="text-gray-500" />
-                                    <div>
-                                        <p className="text-sm text-gray-500">Date Joined</p>
-                                        <p className="font-semibold">
-                                            {new Date(pharmacist.dateJoined).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                        {/* Bio Section */}
+                        <div className="mt-6">
+                            <h3 className="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">Biography</h3>
+                            {isEditing ? (
+                                <textarea
+                                    name="bio"
+                                    value={formData.bio}
+                                    onChange={handleInputChange}
+                                    rows="4"
+                                    placeholder="Tell us about yourself, your experience, and your approach to pharmacy..."
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            ) : (
+                                <p className="text-gray-900 leading-relaxed">
+                                    {formData.bio || 'No biography provided yet.'}
+                                </p>
+                            )}
                         </div>
                     </div>
-
-                    {/* Certifications */}
-                    <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-                            <Award size={24} className="text-indigo-600" />
-                            <span>Certifications</span>
-                        </h2>
-                        <div className="flex flex-wrap gap-2">
-                            {pharmacist.certifications.map((cert, index) => (
-                                <span
-                                    key={index}
-                                    className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium"
-                                >
-                                    {cert}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Languages */}
-                    <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">Languages</h2>
-                        <div className="flex flex-wrap gap-2">
-                            {pharmacist.languages.map((lang, index) => (
-                                <span
-                                    key={index}
-                                    className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium"
-                                >
-                                    {lang}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Activity Status */}
-                    <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">Activity Status</h2>
-                        <div className="flex items-center space-x-2">
-                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <span className="text-green-600 font-semibold">Active</span>
-                            <span className="text-gray-500">
-                                • Last active: {new Date(pharmacist.lastActive).toLocaleString()}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Success Alert */}
-                    <Alert
-                        message={alertMessage}
-                        type={type}
-                        isVisible={showAlert}
-                        onClose={() => setShowAlert(false)}
-                        duration={3000}
-                    />
                 </div>
             ) : (
-                <>
-
-                    <Alert
-                        message="You must be logged in to view your profile."
-                        type="warning"
-                        isVisible={showAlert}
-                        onClose={() => setShowAlert(false)}
-                        duration={2000}
-                    />
-                    <Home loggedIn={loggedIn} setloggedIn={setloggedIn} />
-                </>
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="text-center">
+                        <h2 className="text-xl font-semibold mb-4">Loading profile...</h2>
+                    </div>
+                </div>
             )}
         </>
     );

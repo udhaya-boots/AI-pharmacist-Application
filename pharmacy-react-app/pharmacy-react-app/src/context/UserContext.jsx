@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const UserContext = createContext();
 
@@ -11,49 +12,34 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({ children }) => {
+    const { user: authUser, updateUser: updateAuthUser, isAuthenticated } = useAuth();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Mock user data - replace with actual authentication logic
+    // Sync user data with auth context
     useEffect(() => {
-        // Simulate loading user data
-        const mockUser = {
-            id: 'P001',
-            name: 'Peter Johnson',
-            email: 'peter.johnson@email.com',
-            phone: '+1 (555) 123-4567',
-            dateOfBirth: '1990-05-15',
-            gender: 'Male',
-            bloodType: 'O+',
-            address: '123 Main Street, City, State 12345',
-            emergencyContact: 'Jane Johnson - +1 (555) 987-6543',
-            allergies: ['Penicillin', 'Peanuts'],
-            chronicConditions: ['Hypertension'],
-            lastVisit: '2024-10-10',
-            profilePicture: null,
-            role: 'patient'
-        };
-
-        setTimeout(() => {
-            setUser(mockUser);
-            setLoading(false);
-        }, 1000);
-    }, []);
+        if (isAuthenticated && authUser) {
+            setUser(authUser);
+        } else {
+            setUser(null);
+        }
+        setLoading(false);
+    }, [authUser, isAuthenticated]);
 
     const updateUser = (updatedData) => {
-        setUser(prevUser => ({ ...prevUser, ...updatedData }));
-    };
-
-    const logout = () => {
-        setUser(null);
-        // Add logout logic here (clear tokens, redirect, etc.)
+        const updatedUser = { ...user, ...updatedData };
+        setUser(updatedUser);
+        
+        // Also update the auth context
+        if (updateAuthUser) {
+            updateAuthUser(updatedData);
+        }
     };
 
     const value = {
         user,
         setUser,
         updateUser,
-        logout,
         loading
     };
 

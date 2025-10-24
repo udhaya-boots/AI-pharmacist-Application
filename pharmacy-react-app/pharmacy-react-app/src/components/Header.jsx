@@ -17,10 +17,12 @@ import {
     History as HistoryIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Header = ({ user }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -36,12 +38,13 @@ const Header = ({ user }) => {
     };
 
     const handleHome = () => {
-        navigate('/');
+        navigate('/home');
         handleClose();
     };
 
     const handleLogout = () => {
-        // Add logout logic here
+        logout();
+        navigate('/login');
         handleClose();
     };
 

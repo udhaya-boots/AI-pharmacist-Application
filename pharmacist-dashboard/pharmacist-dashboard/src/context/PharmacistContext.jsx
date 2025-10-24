@@ -13,42 +13,50 @@ export const usePharmacist = () => {
 export const PharmacistProvider = ({ children }) => {
     const [pharmacist, setPharmacist] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Mock pharmacist data - replace with actual authentication logic
+    // Check authentication status and load pharmacist data
     useEffect(() => {
-        // Simulate loading pharmacist data
-        const mockPharmacist = {
-            id: 'PH001',
-            name: 'Dr. John Peter',
-            email: 'john.peter@pharmacy.com',
-            phone: '+1 (555) 234-5678',
-            licenseNumber: 'PH-12345',
-            specialization: 'Clinical Pharmacy',
-            experience: '8 years',
-            department: 'General Medicine',
-            address: '456 Medical Center Drive, City, State 12345',
-            dateJoined: '2016-03-15',
-            lastActive: new Date().toISOString(),
-            certifications: ['PharmD', 'Clinical Pharmacy Specialist', 'Medication Therapy Management'],
-            languages: ['English', 'Spanish', 'French'],
-            workSchedule: 'Monday - Friday, 9:00 AM - 6:00 PM',
-            profilePicture: null,
-            role: 'pharmacist'
+        const loadPharmacistData = () => {
+            const authStatus = localStorage.getItem('pharmacistAuth');
+            const savedPharmacistData = localStorage.getItem('pharmacistData');
+            
+            if (authStatus === 'true' && savedPharmacistData) {
+                try {
+                    const parsedData = JSON.parse(savedPharmacistData);
+                    setPharmacist(parsedData);
+                    setIsAuthenticated(true);
+                } catch (error) {
+                    console.error('Error parsing pharmacist data:', error);
+                    // Clear corrupted data
+                    localStorage.removeItem('pharmacistAuth');
+                    localStorage.removeItem('pharmacistData');
+                    setIsAuthenticated(false);
+                }
+            } else {
+                setIsAuthenticated(false);
+            }
+            setLoading(false);
         };
 
-        setTimeout(() => {
-            setPharmacist(mockPharmacist);
-            setLoading(false);
-        }, 1000);
+        loadPharmacistData();
     }, []);
 
     const updatePharmacist = (updatedData) => {
-        setPharmacist(prevPharmacist => ({ ...prevPharmacist, ...updatedData }));
+        const updatedPharmacist = { ...pharmacist, ...updatedData };
+        setPharmacist(updatedPharmacist);
+        
+        // Update localStorage
+        localStorage.setItem('pharmacistData', JSON.stringify(updatedPharmacist));
     };
 
     const logout = () => {
         setPharmacist(null);
-        // Add logout logic here (clear tokens, redirect, etc.)
+        setIsAuthenticated(false);
+        
+        // Clear localStorage
+        localStorage.removeItem('pharmacistAuth');
+        localStorage.removeItem('pharmacistData');
     };
 
     const value = {
@@ -56,7 +64,8 @@ export const PharmacistProvider = ({ children }) => {
         setPharmacist,
         updatePharmacist,
         logout,
-        loading
+        loading,
+        isAuthenticated
     };
 
     return (

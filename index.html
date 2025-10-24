@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pharmacy Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 3rem 2rem;
+        }
+
+        .apps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .app-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: #4CAF50;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .app-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2E7D32;
+        }
+
+        .app-card p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .credentials {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 4px solid #2196f3;
+        }
+
+        .credentials h4 {
+            color: #1976d2;
+            margin-bottom: 1rem;
+        }
+
+        .credentials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .credential-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .credential-item strong {
+            color: #1976d2;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .apps-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .credentials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 AI Pharmacy Application</h1>
+            <p>Intelligent Healthcare Management System</p>
+        </div>
+        
+        <div class="content">
+            <h2>Choose Your Application</h2>
+            <p>Select the appropriate application based on your role</p>
+            
+            <div class="apps-container">
+                <!-- User/Patient App -->
+                <div class="app-card">
+                    <div class="app-icon">👨‍⚕️</div>
+                    <h3>Patient Portal</h3>
+                    <p>Access your medical records, request prescriptions, view prescription history, and manage your health profile.</p>
+                    <a href="http://localhost:3000" class="btn" target="_blank">Launch Patient App</a>
+                </div>
+                
+                <!-- Pharmacist App -->
+                <div class="app-card">
+                    <div class="app-icon">💊</div>
+                    <h3>Pharmacist Dashboard</h3>
+                    <p>Manage prescriptions, review patient requests, update professional profile, and access pharmacy tools.</p>
+                    <a href="http://localhost:5173" class="btn" target="_blank">Launch Pharmacist Dashboard</a>
+                </div>
+            </div>
+            
+            <!-- Test Credentials -->
+            <div class="credentials">
+                <h4>🔑 Test Credentials</h4>
+                <div class="credentials-grid">
+                    <div class="credential-item">
+                        <strong>Patient Login:</strong><br>
+                        Email: user@example.com<br>
+                        Password: user123
+                    </div>
+                    <div class="credential-item">
+                        <strong>Pharmacist Login:</strong><br>
+                        Email: pharmacist@example.com<br>
+                        Password: pharm123
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
