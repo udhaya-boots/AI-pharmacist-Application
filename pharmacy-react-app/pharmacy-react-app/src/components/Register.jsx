@@ -29,6 +29,12 @@ const Register = () => {
         phone: '',
         dateOfBirth: '',
         gender: '',
+        bloodType: '',
+        address: '',
+        emergencyContact: '',
+        allergies: '',
+        chronicConditions: '',
+        lastVisit: '',
         password: '',
         confirmPassword: ''
     });
@@ -40,6 +46,9 @@ const Register = () => {
     
     const navigate = useNavigate();
 
+    // Get today's date in YYYY-MM-DD format for date restrictions
+    const today = new Date().toISOString().split('T')[0];
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -48,7 +57,9 @@ const Register = () => {
     };
 
     const validateForm = () => {
-        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+        if (!formData.name || !formData.email || !formData.phone || !formData.dateOfBirth || 
+            !formData.gender || !formData.bloodType || !formData.address || 
+            !formData.emergencyContact || !formData.password || !formData.confirmPassword) {
             return 'All required fields must be filled';
         }
         
@@ -167,8 +178,8 @@ const Register = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                px: 2,
+                justifyContent: 'flex-start',
+                px: 4,
                 py: 4
             }}
         >
@@ -176,8 +187,8 @@ const Register = () => {
                 elevation={6}
                 sx={{
                     p: 4,
-                    maxWidth: 450,
                     width: '100%',
+                    maxWidth: '1200px',
                     borderRadius: 3,
                     bgcolor: 'white'
                 }}
@@ -198,7 +209,7 @@ const Register = () => {
                     variant="body2"
                     align="center"
                     sx={{
-                        mb: 3,
+                        mb: 4,
                         color: '#666'
                     }}
                 >
@@ -206,12 +217,20 @@ const Register = () => {
                 </Typography>
 
                 {error && (
-                    <Alert severity="error" sx={{ mb: 2 }}>
+                    <Alert severity="error" sx={{ mb: 3 }}>
                         {error}
                     </Alert>
                 )}
 
                 <Box component="form" onSubmit={handleSubmit}>
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                            gap: '32px',
+                            mb: 4
+                        }}
+                    >
                     <TextField
                         fullWidth
                         label="Full Name"
@@ -219,7 +238,6 @@ const Register = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        sx={{ mb: 2 }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -237,7 +255,6 @@ const Register = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        sx={{ mb: 2 }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -253,7 +270,7 @@ const Register = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        sx={{ mb: 2 }}
+                        required
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -270,7 +287,7 @@ const Register = () => {
                         type="date"
                         value={formData.dateOfBirth}
                         onChange={handleChange}
-                        sx={{ mb: 2 }}
+                        required
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -280,6 +297,9 @@ const Register = () => {
                                     <CalendarIcon color="action" />
                                 </InputAdornment>
                             ),
+                            inputProps: {
+                                max: today
+                            }
                         }}
                     />
 
@@ -290,7 +310,7 @@ const Register = () => {
                         name="gender"
                         value={formData.gender}
                         onChange={handleChange}
-                        sx={{ mb: 2 }}
+                        required
                     >
                         <MenuItem value="Male">Male</MenuItem>
                         <MenuItem value="Female">Female</MenuItem>
@@ -300,13 +320,103 @@ const Register = () => {
 
                     <TextField
                         fullWidth
+                        select
+                        label="Blood Type"
+                        name="bloodType"
+                        value={formData.bloodType}
+                        onChange={handleChange}
+                        required
+                    >
+                        <MenuItem value="A+">A+</MenuItem>
+                        <MenuItem value="A-">A-</MenuItem>
+                        <MenuItem value="B+">B+</MenuItem>
+                        <MenuItem value="B-">B-</MenuItem>
+                        <MenuItem value="AB+">AB+</MenuItem>
+                        <MenuItem value="AB-">AB-</MenuItem>
+                        <MenuItem value="O+">O+</MenuItem>
+                        <MenuItem value="O-">O-</MenuItem>
+                    </TextField>
+
+                    <TextField
+                        fullWidth
+                        label="Address"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                        multiline
+                        rows={2}
+                        placeholder="123 Main Street, City, State ZIP"
+                    />
+
+                    <TextField
+                        fullWidth
+                        label="Emergency Contact"
+                        name="emergencyContact"
+                        value={formData.emergencyContact}
+                        onChange={handleChange}
+                        required
+                        placeholder="Contact Name - Phone Number"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PhoneIcon color="action" />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+
+                    <TextField
+                        fullWidth
+                        label="Allergies"
+                        name="allergies"
+                        value={formData.allergies}
+                        onChange={handleChange}
+                        placeholder="e.g., Penicillin, Peanuts (separate with commas)"
+                        helperText="List any known allergies separated by commas. Leave blank if none."
+                    />
+
+                    <TextField
+                        fullWidth
+                        label="Chronic Conditions"
+                        name="chronicConditions"
+                        value={formData.chronicConditions}
+                        onChange={handleChange}
+                        placeholder="e.g., Hypertension, Diabetes (separate with commas)"
+                        helperText="List any chronic medical conditions separated by commas. Leave blank if none."
+                    />
+
+                    <TextField
+                        fullWidth
+                        label="Last Visit"
+                        name="lastVisit"
+                        type="date"
+                        value={formData.lastVisit}
+                        onChange={handleChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <CalendarIcon color="action" />
+                                </InputAdornment>
+                            ),
+                            inputProps: {
+                                max: today
+                            }
+                        }}
+                        helperText="Date of your last medical visit (optional)"
+                    />
+
+                    <TextField
+                        fullWidth
                         label="Password"
                         name="password"
                         type={showPassword ? 'text' : 'password'}
                         value={formData.password}
                         onChange={handleChange}
                         required
-                        sx={{ mb: 2 }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -334,7 +444,6 @@ const Register = () => {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
-                        sx={{ mb: 3 }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -353,25 +462,26 @@ const Register = () => {
                             ),
                         }}
                     />
+                    </Box>
 
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        disabled={loading}
-                        sx={{
-                            mb: 2,
-                            py: 1.5,
-                            bgcolor: '#4CAF50',
-                            '&:hover': {
-                                bgcolor: '#45a049'
-                            }
-                        }}
-                    >
-                        {loading ? 'Creating Account...' : 'Create Account'}
-                    </Button>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={loading}
+                            sx={{
+                                mb: 2,
+                                py: 1.5,
+                                px: 8,
+                                bgcolor: '#4CAF50',
+                                '&:hover': {
+                                    bgcolor: '#45a049'
+                                }
+                            }}
+                        >
+                            {loading ? 'Creating Account...' : 'Create Account'}
+                        </Button>
 
-                    <Box sx={{ textAlign: 'center', mt: 2 }}>
                         <Typography variant="body2" color="textSecondary">
                             Already have an account?{' '}
                             <Link
