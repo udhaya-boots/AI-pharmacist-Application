@@ -121,31 +121,6 @@ const PrescriptionInfoList = ({ prescriptions,setAlertMessage,setPrescriptions,s
                                 </div>
                             </div>
 
-                            {/* VITAL SIGNS */}
-                            <div className="border-t border-gray-200 pt-4">
-                                <h3 className="text-md font-semibold text-gray-700 mb-3 flex items-center space-x-2">
-                                    <Activity size={20} className="text-indigo-600" />
-                                    <span>Vital Signs</span>
-                                </h3>
-                                <div className="grid grid-cols-4 gap-4">
-                                    <div>
-                                        <p className="text-xs text-gray-500">Blood Pressure</p>
-                                        <p className="text-md font-semibold text-gray-800">{prescription.vitalSigns.bloodPressure}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-500">Heart Rate</p>
-                                        <p className="text-md font-semibold text-gray-800">{prescription.vitalSigns.heartRate}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-500">Temperature</p>
-                                        <p className="text-md font-semibold text-gray-800">{prescription.vitalSigns.temperature}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-500">O2 Saturation</p>
-                                        <p className="text-md font-semibold text-gray-800">{prescription.vitalSigns.oxygenSaturation}</p>
-                                    </div>
-                                </div>
-                            </div>
                         </section>
 
                         {/* ILLNESS DESCRIPTION */}

@@ -20,7 +20,7 @@ function App() {
             <Box sx={{ minHeight: "60vh", bgcolor: "#F3E9D2" }}>
               <Routes>
                 {/* Redirect root to login */}
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/" element={<Navigate to="/home" replace />} />
                 
                 {/* Public routes */}
                 <Route path="/login" element={<Login />} />

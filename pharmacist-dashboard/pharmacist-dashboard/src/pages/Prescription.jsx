@@ -29,7 +29,7 @@ const PrescriptionPage = () => {
                     <div className="mb-2">
                         <button
                             className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800 mb-4 transition-colors"
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/dashboard')}
                         >
                             <ArrowLeft size={20} />
                             <span className="font-medium">Go Home</span>

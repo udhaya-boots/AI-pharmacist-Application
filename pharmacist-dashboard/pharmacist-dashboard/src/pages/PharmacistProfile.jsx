@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePharmacist } from '../context/PharmacistContext';
 
 const PharmacistProfile = () => {
-    const { isAuthenticated } = useAuth();
-    const { pharmacist, updatePharmacist } = usePharmacist();
+    const { pharmacist, updatePharmacist,isAuthenticated } = usePharmacist();
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
@@ -16,7 +15,7 @@ const PharmacistProfile = () => {
         profilePicture: '',
         bio: ''
     });
-
+    
     useEffect(() => {
         if (pharmacist) {
             setFormData({
