@@ -9,22 +9,13 @@ const useAudioFunctions = () => {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
-  // 🔊 Calls your backend to transcribe with Whisper
+  // Replace this with a real API call 
   const transcribeAudio = async (blob) => {
-    const formData = new FormData();
-    formData.append("file", blob, "recording.webm");
-
-    try {
-      const response = await fetch("http://localhost:5000/api/transcribe", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      return data.text || "No text returned from transcription API.";
-    } catch (err) {
-      console.error(err);
-      return "Error transcribing audio.";
-    }
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve("Sample transcription text from the recorded audio.");
+      }, 2000)
+    );
   };
 
   const startRecording = async () => {
@@ -64,7 +55,8 @@ const useAudioFunctions = () => {
 
       mediaRecorderRef.current.start();
       setIsRecording(true);
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Could not access microphone. Please check permissions.");
     }
   };

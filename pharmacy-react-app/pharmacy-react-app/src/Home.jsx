@@ -1,6 +1,5 @@
 import {
   TextField,
-  Snackbar,
   Alert,
   Box,
   Typography,
@@ -17,22 +16,28 @@ import useGeneratePrescription from "./hooks/useGeneratePrescription";
 import useAudioFunctions from "./hooks/useAudioFunctions";
 import Header from "./components/Header";
 import { LatestPrescriptions } from "./components/Services";
+import ShowTranscription from "./components/ShowTranscription";
 
 const Home = () => {
   const { user } = useUser();
   const {
     symptoms,
     setSymptoms,
-    notificationMsg,
     error,
-    prescription,
     handleSubmit,
   } = useGeneratePrescription();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { startRecording, handlePlay, stopRecording, isRecording, audioUrl,transcribedText } =
-    useAudioFunctions();
+
+  const {
+    startRecording,
+    handlePlay,
+    stopRecording,
+    isRecording,
+    audioUrl,
+    transcribedText,
+  } = useAudioFunctions();
 
   return (
     <>
@@ -167,23 +172,6 @@ const Home = () => {
                 }}
               />
             </Stack>
-            {audioUrl && (
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 2,
-                  fontStyle: "italic",
-                  color: "#333",
-                  bgcolor: "#f7f7f7",
-                  p: 1.5,
-                  borderRadius: 2,
-                  width: "100%",
-                }}
-              >
-                {transcribedText || "Processing transcription..."}
-              </Typography>
-            )}
-
           </Box>
 
           {error && (
@@ -193,11 +181,16 @@ const Home = () => {
           )}
         </Paper>
 
+        {/* Floating Transcription Popup (doesn't affect layout) */}
+        <ShowTranscription
+          audioUrl={audioUrl}
+          transcribedText={transcribedText}
+        />
+
         {/* Services Section */}
         <Box sx={{ width: "100%", mt: { xs: 4, sm: 6 } }}>
           <LatestPrescriptions isMobile={isMobile} />
         </Box>
-
       </Box>
     </>
   );
