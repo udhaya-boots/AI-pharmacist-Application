@@ -60,7 +60,7 @@ const SideBar = ({ loggedIn }) => {
                         <span>Profile</span>
                     </button>
 
-                    {/* <button className="flex items-center space-x-3 hover:text-indigo-300 transition-colors duration-200 text-left">
+                    <button className="flex items-center space-x-3 hover:text-indigo-300 transition-colors duration-200 text-left">
                         <FileCheck size={20} />
                         <span>Reports</span>
                     </button>
@@ -68,7 +68,7 @@ const SideBar = ({ loggedIn }) => {
                     <button className="flex items-center space-x-3 hover:text-indigo-300 transition-colors duration-200 text-left">
                         <Settings size={20} />
                         <span>Settings</span>
-                    </button> */}
+                    </button>
 
                     <button 
                         onClick={handleLogout}
