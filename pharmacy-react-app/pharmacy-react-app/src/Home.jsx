@@ -31,7 +31,7 @@ const Home = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { startRecording, handlePlay, stopRecording, isRecording, audioUrl } =
+  const { startRecording, handlePlay, stopRecording, isRecording, audioUrl,transcribedText } =
     useAudioFunctions();
 
   return (
@@ -167,6 +167,23 @@ const Home = () => {
                 }}
               />
             </Stack>
+            {audioUrl && (
+              <Typography
+                variant="body2"
+                sx={{
+                  mt: 2,
+                  fontStyle: "italic",
+                  color: "#333",
+                  bgcolor: "#f7f7f7",
+                  p: 1.5,
+                  borderRadius: 2,
+                  width: "100%",
+                }}
+              >
+                {transcribedText || "Processing transcription..."}
+              </Typography>
+            )}
+
           </Box>
 
           {error && (
@@ -181,28 +198,6 @@ const Home = () => {
           <LatestPrescriptions isMobile={isMobile} />
         </Box>
 
-        {/* Optional Snackbar Section (kept for future use)
-        <Snackbar
-          open={notificationMsg}
-          autoHideDuration={10000}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity="info" sx={{ width: "100%" }}>
-            You will be notified when the prescription is ready
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={!!prescription}
-          autoHideDuration={8000}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert severity="success" sx={{ width: "100%" }}>
-            {typeof prescription === "string"
-              ? prescription
-              : "Prescription generated successfully!"}
-          </Alert>
-        </Snackbar> */}
       </Box>
     </>
   );
